@@ -145,6 +145,10 @@ Este programa cumple los requerimientos establecidos:
 ## Diagrama de flujo
 ![flujo1](Diagrama_LAB1.png)
 
+## Plano de planta
+Se adjunta una vista de planta de la estación en la cual se visualiza el robot, la banda transportadora y el objeto de trabajo en el que se va a hacer el decorado 
+
+
 ## Descripción de funciones y construcciones RAPID usadas
 
 **Definiciones de datos (antes del `main`)**
@@ -194,7 +198,7 @@ Este programa cumple los requerimientos establecidos:
 
 **Instrucciones de movimiento (trayectorias)**
 
-> En los movimientos de proceso uso siempre `\WObj:=Workobject_2` y la herramienta `Porta_Marcador`.
+> En los movimientos de proceso se usó `\WObj:=Workobject_2` y la herramienta `Porta_Marcador`.
 
 * **`MoveJ target, v, z, tool \WObj:=…`**
   Traslados/articulado y HOME cartesiano. En general `v1000, z100`.
@@ -229,4 +233,19 @@ Este programa cumple los requerimientos establecidos:
 * **Waypoints seguros** (p. ej., `Target_No_Golpear`) para entrar/salir sin cruzar el pastel.
 * **Rutas `Path_*` separadas** para mantener el código legible y reordenable.
 
+## Herramienta de trabajo
+Se modeló la herramienta según las especificaciones del flanche en la guia de laboratorio, posteriormente se cargó al entorno de robot studio y se asigno al robot correspondiente el cual es el ABB IRB 140 se define que es una herramienta de trabajo y se procede a crear, en robot studio aparece en la ventana de diseño que es un mecanismo en este caso de nombre porta
+<div align="center">
+ 
+
+</div>
+El marco de referencia de la herramienta se modifica de tal forma que el eje z coincida con el ataque del marcador esto será especialmente útil al momento de realizar las trayectorias que nos permitirán definir nuestra decoración
+![porta](imagenes2/porta.png)
+
+## Código en RAPID
+
+Para este apartado se puede encontrar el código utilizado en la carpeta *"Códigos"*.
+
+## Video explicativo
+Para un mayor detalle de lo realizado, se puede ver el video de la implementación tanto simulada como física [aquí](https://youtu.be/SD21q73Zi-A)
 
