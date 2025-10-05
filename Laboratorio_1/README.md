@@ -1,4 +1,4 @@
- Laboratorio No. 01
+# Laboratorio No. 01
 # Robótica Industrial- Trayectorias, Entradas y Salidas Digitales.
 
 * Edgar Esteban Erazo Lagos
@@ -93,7 +93,7 @@ Se implementan puntos de referencia seguros (*Target_No_Golpear*) para evitar qu
 Al usar un único *WorkObject* para todas las trayectorias, el programa es adaptable: si la ubicación del pastel cambia, basta con ajustar el *WObj* sin recalibrar cada punto. Separar cada figura en procedimientos independientes mejora la legibilidad, el mantenimiento y las pruebas parciales.
 
 
-** Fragmento representativo / pseudocódigo**
+**Fragmento representativo / pseudocódigo**
 
 ```rapid
 loop:
