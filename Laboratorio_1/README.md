@@ -13,9 +13,11 @@ El objetivo principal es comprender la lógica de control de un robot de seis ej
 A través de la simulación se buscó aplicar conceptos de seguridad, homing, coordinación con una banda transportadora y control secuencial de tareas, replicando el comportamiento de una célula industrial real.
 
 **Objetivo general**
+
 El propósito de este laboratorio fue diseñar e implementar un sistema automatizado para decorar un pastel usando RobotStudio con un robot ABB. Debía respetar las restricciones definidas: velocidades entre **100 y 1000 mm/s**, zona de precisión menor o igual a **z10**, retorno a la posición *HOME* con todas las articulaciones en 0°, manejo de dos entradas y dos salidas digitales, y control de la banda transportadora para despachar el pastel al final de la decoración.
 
 **Arquitectura de la celda**
+
 La celda consta de un robot ABB simulado (controlador IRC5), una herramienta denominada *Porta_Marcador* y un *WorkObject_2* situado sobre la banda o pastel.
 El *Porta_Marcador* define el TCP y la orientación de escritura del marcador. El *WorkObject_2* fija las referencias del proceso: todas las trayectorias se definen respecto a ese sistema de coordenadas, lo que facilita que puedan cambiarse posiciones del pastel sin reprogramar cada punto.
 
@@ -28,6 +30,7 @@ Además, se definieron puntos clave para seguridad y funcionamiento:
 
 
 **Entradas, salidas y modo de operación**
+
 Se usan dos señales de entrada digital:
 
 * *DI_01* para iniciar el ciclo de producción,
@@ -44,23 +47,27 @@ En cada inicio de ciclo se ejecuta *Reset* sobre todas esas salidas (DO_01, DO_0
 
 
 **Estrategia de homing y referencias**
+
 El robot tiene dos modos de *homing*. Primero, *HOME_IR* es una posición articular con todas las articulaciones en 0°, ejecutado con *MoveAbsJ*. Luego, *HOME* es una posición cartesiana despejada usada para desplazamientos seguros.
 La posición de mantenimiento (*Target_Mantenimiento*) se diseña para que el operador pueda intervenir con comodidad y sin riesgos. *Target_No_Golpear* actúa como punto intermedio para evitar que la herramienta cruce directamente zonas sensibles del pastel.
 
 
 **Tool y WorkObject**
+
 El *Porta_Marcador* recoge el desplazamiento geométrico hacia la punta del marcador y su orientación de escritura.
 El *WorkObject_2* fija el sistema de coordenadas del pastel o banda, de modo que las trayectorias (Paths) usen siempre la misma referencia. Esto permite mover la pieza de trabajo, replicar el diseño o ajustar la posición sin tener que reprogramar los puntos del robot.
 
 
 
 **Trayectorias de proceso**
+
 Cada figura o letra se programa como un *Path_* independiente: *Path_D1*, *Path_A2*, *Path_V3*, etc.
 Dentro de cada ruta se mezclan movimientos lineales (*MoveL*) para segmentos rectos y curvos (*MoveC*) para arcos, y *MoveJ* para accesos rápidos entre caminos.
 Para garantizar calidad en el trazo se utiliza velocidad *v100* junto con zona *z1*. Para evitar cruces con lo ya decorado, después de cada figura el robot retorna a *Path_Pastel_Inicio*.
 
 
 **Lógica del programa / flujo general**
+
 El programa principal `main()` corre en bucle infinito (`WHILE TRUE`). Dentro de ese ciclo:
 
 * Primero se resetean todas las salidas digitales.
@@ -81,15 +88,18 @@ De esta forma el sistema nunca entra en conflicto entre modos y siempre retorna 
 
 
 **Parámetros de movimiento y trazado**
+
 Durante la decoración se usa velocidad *v100* y zona *z1* para maximizar precisión. Los movimientos de desplazamiento general usan *v1000* y zona *z100*.
 El uso de *MoveC* permite suavizar las curvas, y *MoveJ* reduce el tiempo en desplazamientos sin contacto.
 
 
 **Seguridad y colisiones**
+
 Se implementan puntos de referencia seguros (*Target_No_Golpear*) para evitar que la herramienta cruce zonas del pastel o de la banda. Las posiciones de *HOME* garantizan despeje cuando el robot se mueve entre tareas. El modo mantenimiento se diseña para separar al robot de la zona de trabajo mientras el operador interviene.
 
 
 **Reutilización y modularidad**
+
 Al usar un único *WorkObject* para todas las trayectorias, el programa es adaptable: si la ubicación del pastel cambia, basta con ajustar el *WObj* sin recalibrar cada punto. Separar cada figura en procedimientos independientes mejora la legibilidad, el mantenimiento y las pruebas parciales.
 
 
@@ -122,6 +132,7 @@ endloop
 
 
 **Validación frente a los requisitos del laboratorio**
+
 Este programa cumple los requerimientos establecidos:
 
 * Velocidades entre 100 y 1000 mm/s
