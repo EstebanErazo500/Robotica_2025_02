@@ -142,7 +142,91 @@ Este programa cumple los requerimientos establecidos:
 * Banda activa al inicio y al final
 * Trayectorias referenciadas a un mismo *WorkObject* para máxima portabilidad
 
-### Diagrama de flujo
+## Diagrama de flujo
 ![flujo1](Diagrama_LAB1.png)
+
+## Descripción de funciones y construcciones RAPID usadas
+
+###Definiciones de datos (antes del `main`)
+
+* **`PERS tooldata Porta_Marcador`**
+  Herramienta del porta–marcador: TCP y orientación. Base de todos los movimientos.
+* **`TASK PERS wobjdata Workobject_2`**
+  Sistema de coordenadas del pastel/banda. Permite reubicar el proceso sin recalcular puntos.
+* **`CONST robtarget ...`**
+  Puntos cartesianos del proceso (letras, zonas seguras, HOME cartesiano, etc.).
+* **`CONST jointtarget HOME_IR`**
+  HOME articular con las seis juntas en 0°. Requisito del laboratorio.
+
+
+### Estructura del programa
+
+* **`PROC main()`**
+  Bucle continuo: inicialización de salidas, decisión de modo y llamadas a rutas.
+* **`PROC Path_*()`**
+  Cada letra/figura es un procedimiento independiente (`Path_D1`, `Path_A2`, …). Facilita pruebas y mantenimiento.
+
+
+
+###  Control de flujo
+
+* **`WHILE TRUE DO … ENDWHILE`**
+  Ciclo de la célula que corre indefinidamente.
+* **`IF / ELSEIF / ENDIF`**
+  Selección de modo:
+
+  * **Producción:** `DI_01 = 1` y `DI_02 = 0`.
+  * **Mantenimiento:** `DI_01 = 0` y `DI_02 = 1`.
+* **`WaitUntil (condición)`**
+  En mantenimiento, espera a `DI_01 = 1 ∧ DI_02 = 1` para volver al ciclo.
+
+
+### Entradas/Salidas y temporización
+
+* **`Set` / `Reset`**
+
+  * `DO_01`: luz ciclo/producción.
+  * `DO_02`: luz mantenimiento.
+  * `Conveyor_FWD`: banda hacia despacho.
+  * `Conveyor_INV`: reservado (se mantiene en `Reset`).
+* **`WaitTime 4;`**
+  Temporiza la banda 4 s para posicionamiento/despacho.
+
+### Instrucciones de movimiento (trayectorias)
+
+> En los movimientos de proceso uso siempre `\WObj:=Workobject_2` y la herramienta `Porta_Marcador`.
+
+* **`MoveJ target, v, z, tool \WObj:=…`**
+  Traslados/articulado y HOME cartesiano. En general `v1000, z100`.
+* **`MoveL target, v, z, tool \WObj:=…`**
+  Segmentos rectos del trazo. En proceso: `v100, z1`.
+* **`MoveC via, target, v, z, tool \WObj:=…`**
+  Curvas y arcos de letras.
+* **`MoveAbsJ HOME_IR, V300, fine, tool`**
+  HOME articular (todas las juntas a 0°). Parada exacta con `fine`.
+
+
+
+### Patrón operativo 
+
+1. **Inicialización:** `Reset DO_01/DO_02/Conveyor_FWD/INV`.
+2. **Producción (DI_01=1, DI_02=0):**
+   `Set DO_01` → banda 4 s → `Reset`.
+   Entrada segura (`Path_No_Golpear`) → posición de trabajo (`Path_Pastel_Inicio`).
+   Secuencia de **`Path_*`** (letras/figuras) a **`v100, z1`**.
+   Despacho final: banda 4 s → `Reset`.
+   Salida segura → **HOME cartesiano** (`MoveJ v1000, z100`) → **HOME articular** (`MoveAbsJ`).
+   Reseteo de salidas y vuelta al bucle.
+3. **Mantenimiento (DI_01=0, DI_02=1):**
+   `Set DO_02` → `Path_HOME` → `Path_Mantenimiento`.
+   `WaitUntil DI_01=1 ∧ DI_02=1` → `Reset DO_02` → volver al bucle.
+
+
+###  Decisiones de diseño 
+
+* **WObj en todo el trazo** para portabilidad del proceso.
+* **`z1` en proceso / `z100` en traslados**: precisión del trazo vs. rapidez.
+* **Waypoints seguros** (p. ej., `Target_No_Golpear`) para entrar/salir sin cruzar el pastel.
+* **Rutas `Path_*` separadas** para mantener el código legible y reordenable.
 
 
