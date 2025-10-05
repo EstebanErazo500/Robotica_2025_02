@@ -147,7 +147,7 @@ Este programa cumple los requerimientos establecidos:
 
 ## Descripción de funciones y construcciones RAPID usadas
 
-###Definiciones de datos (antes del `main`)
+**Definiciones de datos (antes del `main`)**
 
 * **`PERS tooldata Porta_Marcador`**
   Herramienta del porta–marcador: TCP y orientación. Base de todos los movimientos.
@@ -159,7 +159,7 @@ Este programa cumple los requerimientos establecidos:
   HOME articular con las seis juntas en 0°. Requisito del laboratorio.
 
 
-### Estructura del programa
+**Estructura del programa**
 
 * **`PROC main()`**
   Bucle continuo: inicialización de salidas, decisión de modo y llamadas a rutas.
@@ -168,7 +168,7 @@ Este programa cumple los requerimientos establecidos:
 
 
 
-###  Control de flujo
+**Control de flujo**
 
 * **`WHILE TRUE DO … ENDWHILE`**
   Ciclo de la célula que corre indefinidamente.
@@ -181,7 +181,7 @@ Este programa cumple los requerimientos establecidos:
   En mantenimiento, espera a `DI_01 = 1 ∧ DI_02 = 1` para volver al ciclo.
 
 
-### Entradas/Salidas y temporización
+**Entradas/Salidas y temporización**
 
 * **`Set` / `Reset`**
 
@@ -192,7 +192,7 @@ Este programa cumple los requerimientos establecidos:
 * **`WaitTime 4;`**
   Temporiza la banda 4 s para posicionamiento/despacho.
 
-### Instrucciones de movimiento (trayectorias)
+**Instrucciones de movimiento (trayectorias)**
 
 > En los movimientos de proceso uso siempre `\WObj:=Workobject_2` y la herramienta `Porta_Marcador`.
 
@@ -207,7 +207,7 @@ Este programa cumple los requerimientos establecidos:
 
 
 
-### Patrón operativo 
+**Patrón operativo**
 
 1. **Inicialización:** `Reset DO_01/DO_02/Conveyor_FWD/INV`.
 2. **Producción (DI_01=1, DI_02=0):**
@@ -222,7 +222,7 @@ Este programa cumple los requerimientos establecidos:
    `WaitUntil DI_01=1 ∧ DI_02=1` → `Reset DO_02` → volver al bucle.
 
 
-###  Decisiones de diseño 
+**Decisiones de diseño** 
 
 * **WObj en todo el trazo** para portabilidad del proceso.
 * **`z1` en proceso / `z100` en traslados**: precisión del trazo vs. rapidez.
