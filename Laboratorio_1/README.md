@@ -143,6 +143,6 @@ Este programa cumple los requerimientos establecidos:
 * Trayectorias referenciadas a un mismo *WorkObject* para máxima portabilidad
 
 ### Diagrama de flujo
-![flujo1](Diagrama LAB1 _ Mermaid Chart-2025-10-05-223730.png)
+![flujo1](Diagrama_LAB1.png)
 
 
