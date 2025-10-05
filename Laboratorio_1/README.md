@@ -142,4 +142,7 @@ Este programa cumple los requerimientos establecidos:
 * Banda activa al inicio y al final
 * Trayectorias referenciadas a un mismo *WorkObject* para máxima portabilidad
 
+### Diagrama de flujo
+![flujo1](Diagrama LAB1 _ Mermaid Chart-2025-10-05-223730.png)
+
 
