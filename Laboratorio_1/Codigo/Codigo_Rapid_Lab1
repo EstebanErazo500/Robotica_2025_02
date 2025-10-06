@@ -186,8 +186,6 @@ MODULE Module1
     CONST jointtarget HOME_IR:=[[0,0,0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
     CONST robtarget Target_Mantenimiento:=[[640,1027.185107433,-141.883543813],[0.701057385,-0.092295956,-0.092295956,-0.701057385],[-2,-1,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
     
-    
-    
     PROC main()
 
         WHILE TRUE DO 
@@ -253,9 +251,8 @@ MODULE Module1
                 Path_JAM1;
                 Path_Pastel_Inicio;
                 Path_JAM2;
-                Path_No_Golpear;
-               
                 
+                Path_No_Golpear;
                 Path_HOME;
                 Path_HOME_IR;
                 Reset DO_01;
@@ -269,19 +266,9 @@ MODULE Module1
                 WaitUntil DI_01=1 AND DI_02=1;
                 
         ENDIF 
-        
-        
-        ENDWHILE
-
-        
-        
-        
+     ENDWHILE
     ENDPROC
    
-    
-    
-    
-    
     
     PROC Path_D1()
         MoveJ Target_10,v100,z1,Porta_Marcador\WObj:=Workobject_2;
