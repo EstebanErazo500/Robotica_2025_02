@@ -143,11 +143,12 @@ Este programa cumple los requerimientos establecidos:
 * Trayectorias referenciadas a un mismo *WorkObject* para máxima portabilidad
 
 ## Diagrama de flujo
+Por medio de la herramienta Mermaid Chart se realizó un diagrama de flujo del proceso realizado por el robot para completar el ejercicio propuesto de dibujar sobre un pastel.
 ![flujo1](Diagrama_LAB1.png)
 
 ## Plano de planta
-Se adjunta una vista de planta de la estación en la cual se visualiza el robot, la banda transportadora y el objeto de trabajo en el que se va a hacer el decorado 
-
+Respecto al espacio de trabajo encontrado en RobotStudio, se adjunta una vista de planta de la estación en la cual se visualiza el robot, la banda transportadora y el objeto de trabajo en el que se va a hacer el decorado 
+![flujo1](Imagenes/Planta_de_trabajo.jpeg)
 
 ## Descripción de funciones y construcciones RAPID usadas
 
@@ -237,15 +238,18 @@ Se adjunta una vista de planta de la estación en la cual se visualiza el robot,
 Se modeló la herramienta según las especificaciones del flanche en la guia de laboratorio, posteriormente se cargó al entorno de robot studio y se asigno al robot correspondiente el cual es el ABB IRB 140 se define que es una herramienta de trabajo y se procede a crear, en robot studio aparece en la ventana de diseño que es un mecanismo en este caso de nombre porta
 <div align="center">
  
+![her1](Imagenes/PortaMarcador1.jpg)
 
 </div>
+
 El marco de referencia de la herramienta se modifica de tal forma que el eje z coincida con el ataque del marcador esto será especialmente útil al momento de realizar las trayectorias que nos permitirán definir nuestra decoración
-![porta](imagenes2/porta.png)
+![porta](Imagenes/PortaMarcador2.jpg)
 
 ## Código en RAPID
 
-Para este apartado se puede encontrar el código utilizado en la carpeta *"Códigos"*.
+El código realizado en Robot Studio para el desarrollo de la actividad se puede encontrar dentro de la carpeta llamada *"Codigo"*.
 
 ## Video explicativo
-Para un mayor detalle de lo realizado, se puede ver el video de la implementación tanto simulada como física [aquí](https://youtu.be/SD21q73Zi-A)
+
+Para un mayor detalle de la actividad realizada, se puede observar un video de la implementación tanto simulada como física de esta [aquí](https://youtu.be/SD21q73Zi-A)
 
