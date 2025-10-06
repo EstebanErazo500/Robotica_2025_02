@@ -145,7 +145,7 @@ Este programa cumple los requerimientos establecidos:
 ## Diagrama de flujo
 Por medio de la herramienta Mermaid Chart se realizó un diagrama de flujo del proceso realizado por el robot para completar el ejercicio propuesto de dibujar sobre un pastel.
 
-![flujo1](Diagrama_LAB1.png)
+![flujo1](Imagenes/DiagramaFlujoLab1.png)
 
 ## Plano de planta
 Respecto al espacio de trabajo encontrado en RobotStudio, se adjunta una vista de planta de la estación en la cual se visualiza el robot, la banda transportadora y el objeto de trabajo en el que se va a hacer el decorado.
@@ -255,5 +255,6 @@ El código realizado en Robot Studio para el desarrollo de la actividad se puede
 
 ## Video explicativo
 
-Para un mayor detalle de la actividad realizada, se puede observar un video de la implementación tanto simulada como física de esta [aquí]([https://youtu.be/0JdNzMYcMH4?si=PPf1MCZRZ-cwHxok])
+Para un mayor detalle de lo realizado, se puede ver el video de la implementación tanto simulada como física [aquí](https://youtu.be/SD21q73Zi-A)
+Para un mayor detalle de la actividad realizada, se puede observar un video de la implementación tanto simulada como física de esta [aquí](https://youtu.be/0JdNzMYcMH4?si=PPf1MCZRZ-cwHxok)
 
