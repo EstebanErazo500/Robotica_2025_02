@@ -1,8 +1,8 @@
 # Laboratorio No. 01
 # Robótica Industrial- Trayectorias, Entradas y Salidas Digitales.
 
-* Edgar Esteban Erazo Lagos
 * Omar David Acosta Zambrano
+* Edgar Esteban Erazo Lagos
 
 ## Descripción del sistema y operaciones
 
