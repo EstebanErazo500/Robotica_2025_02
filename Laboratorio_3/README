@@ -1,1 +1,11 @@
+# Laboratorio No. 03
+# Robótica Industrial - Análisis y Operación del Manipulador EPSON T3-401S.
 
+* Omar David Acosta Zambrano
+* Edgar Esteban Erazo Lagos
+
+**Introducción**
+
+Los manipuladores industriales son sistemas clave en la automatización por su capacidad de ejecutar tareas con precisión y control en entornos productivos. Sin embargo, su desempeño depende en gran medida de sus configuraciones iniciales, modos de operación y del software que los gestiona.
+En este laboratorio se analiza el manipulador EPSON T3-401S mediante el uso de EPSON RC+ 7.0, con el objetivo de comprender sus configuraciones home, modos de movimiento manual, niveles de velocidad y manejo de trayectorias dentro de su espacio de trabajo. De igual forma, se diseña un gripper neumático por vacío para la manipulación segura de huevos y se implementa una rutina que sigue el patrón de movimiento del caballo en ajedrez, lo cual exige una planificación estructurada de la trayectoria.
+Finalmente, se comparan las herramientas EPSON RC+ 7.0, RoboDK y RobotStudio, identificando sus diferencias y alcances en simulación, programación y control de manipuladores industriales.
