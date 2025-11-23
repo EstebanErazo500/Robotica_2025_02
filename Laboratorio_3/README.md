@@ -4,7 +4,7 @@
 * Omar David Acosta Zambrano
 * Edgar Esteban Erazo Lagos
 
-##Introducción
+## Introducción
 
 Los manipuladores industriales son sistemas clave en la automatización por su capacidad de ejecutar tareas con precisión y control en entornos productivos. Sin embargo, su desempeño depende en gran medida de sus configuraciones iniciales, modos de operación y del software que los gestiona.
 En este laboratorio se analiza el manipulador EPSON T3-401S mediante el uso de EPSON RC+ 7.0, con el objetivo de comprender sus configuraciones home, modos de movimiento manual, niveles de velocidad y manejo de trayectorias dentro de su espacio de trabajo. De igual forma, se diseña un gripper neumático por vacío para la manipulación segura de huevos y se implementa una rutina que sigue el patrón de movimiento del caballo en ajedrez, lo cual exige una planificación estructurada de la trayectoria.
@@ -36,7 +36,7 @@ El manipulador EPSON T3-401S, al ser de tipo SCARA, está optimizado para movimi
 En contraste, el Motoman MH6 y el ABB IRB140 son robots articulados de seis ejes, capaces de operar en entornos tridimensionales con mayor libertad geométrica. Esto les permite ejecutar tareas que requieren orientación compleja del efector final, aunque con menor especialización en desplazamientos planos rápidos.
 Mientras el EPSON prioriza velocidad y exactitud en trayectorias cortas y repetitivas, los otros dos manipuladores se enfocan en versatilidad espacial y mayor rango de aplicaciones industriales. Esta diferencia justifica su selección según el tipo de proceso, siendo el T3-401S el más adecuado para operaciones controladas de pick and place como las desarrolladas en este laboratorio.
 
-# Configuraciones HOME del EPSON T3-401S
+## Configuraciones HOME del EPSON T3-401S
 
 La posición **HOME** en el manipulador EPSON T3-401S corresponde a la postura de referencia desde la cual el robot inicia su operación y establece un punto seguro de reposo. Esta configuración es utilizada tanto para inicialización del sistema como para garantizar un estado estable cuando no se ejecutan tareas activas.
 
@@ -47,11 +47,11 @@ En el EPSON T3-401S, la posición HOME se define mediante una combinación espec
 
 Durante el desarrollo del laboratorio, la posición HOME utilizada permitió iniciar los ciclos desde una altura suficiente sobre el plano de trabajo, facilitando la transición hacia las posiciones objetivo sin generar trayectorias forzadas ni aproximaciones peligrosas al objeto manipulado. Esta configuración resulta adecuada para la tarea propuesta, ya que equilibra estabilidad, accesibilidad y seguridad, garantizando que el robot pueda desplazarse hacia cualquier punto de la cubeta siguiendo el patrón de movimiento establecido sin comprometer la integridad del huevo ni la eficiencia del ciclo.
 
-# Procedimiento para movimientos manuales del EPSON T3-401S
+## Procedimiento para movimientos manuales del EPSON T3-401S
 
 El movimiento manual del manipulador EPSON T3-401S se realiza mediante el software **EPSON RC+ 7.0** ejecutado en el computador, el cual actúa como panel de control equivalente a un teach pendant. Desde este entorno es posible seleccionar modos de operación, habilitar servomotores y ejecutar movimientos articulares o cartesianos para la enseñanza de puntos y la verificación de trayectorias.
 
-## Activación del sistema
+**Activación del sistema**
 
 1. Encender el controlador del robot y el computador con EPSON RC+ 7.0.
 2. Abrir el proyecto correspondiente en EPSON RC+.
@@ -59,11 +59,11 @@ El movimiento manual del manipulador EPSON T3-401S se realiza mediante el softwa
 4. Activar los servomotores mediante la opción **Servo ON** en la barra de control.
 5. Verificar que el espacio de trabajo esté libre de obstáculos y que el efector final no esté próximo a la cubeta o a otros elementos.
 
-## Cambio entre modos de movimiento
+**Cambio entre modos de movimiento**
 
 El control de movimiento se realiza desde el panel de **Jog** en EPSON RC+, el cual permite seleccionar entre:
 
-### Modo Articular (Joint)
+**Modo Articular (Joint)**
 
 - Permite mover de forma independiente cada uno de los ejes del robot:
   - Eje 1: rotación de la base.
@@ -73,7 +73,7 @@ El control de movimiento se realiza desde el panel de **Jog** en EPSON RC+, el c
 - Se selecciona el modo **Joint** en el panel de jog.
 - El operador acciona los botones de desplazamiento asociados a cada eje para realizar movimientos incrementales controlados.
 
-### Modo Cartesiano (XYZ)
+**Modo Cartesiano (XYZ)**
 
 - Permite mover el efector final en coordenadas rectangulares:
   - Traslación en **X** (izquierda/derecha).
@@ -83,7 +83,7 @@ El control de movimiento se realiza desde el panel de **Jog** en EPSON RC+, el c
 - Se selecciona el modo **XYZ** en el panel de jog.
 - El movimiento se realiza manteniendo la orientación definida del efector final, lo que resulta útil para aproximaciones controladas sobre la cubeta de huevos.
 
-## Movimientos de traslación y rotación
+**Movimientos de traslación y rotación**
 
 En modo cartesiano, el operador puede ajustar la posición del TCP de forma directa:
 
@@ -94,7 +94,7 @@ En modo cartesiano, el operador puede ajustar la posición del TCP de forma dire
 
 Estos movimientos se ejecutan desde el teclado o los controles gráficos del panel de jog, con pasos incrementales ajustables según la configuración seleccionada en EPSON RC+.
 
-## Consideraciones operativas
+**Consideraciones operativas**
 
 - Se recomienda iniciar siempre con velocidades bajas al acercarse a la cubeta o al huevo.
 - El modo articular es más adecuado para movimientos globales y reposicionamientos amplios.
@@ -103,13 +103,13 @@ Estos movimientos se ejecutan desde el teclado o los controles gráficos del pan
 
 Este procedimiento permite realizar de forma segura la enseñanza de puntos y la verificación de trayectorias necesarias para implementar la rutina de movimiento basada en el patrón de caballo.
 
-# Niveles de velocidad en movimientos manuales del EPSON T3-401S
+## Niveles de velocidad en movimientos manuales del EPSON T3-401S
 
 El manipulador EPSON T3-401S permite regular la velocidad de los movimientos manuales directamente desde la interfaz de **EPSON RC+ 7.0** en el computador, el cual funciona como panel de control tipo teach pendant. Esta configuración resulta fundamental para garantizar precisión, seguridad y control durante la enseñanza de puntos y la manipulación de huevos.
 
 La velocidad se ajusta desde el panel de jog, donde el operador puede seleccionar diferentes niveles según el tipo de movimiento que se requiera, el entorno inmediato y la proximidad al objeto manipulado.
 
-## Niveles disponibles de velocidad
+**Niveles disponibles de velocidad**
 
 El sistema dispone de varios niveles de velocidad configurables para el movimiento manual, los cuales se emplean según la etapa del proceso:
 
@@ -120,19 +120,19 @@ El sistema dispone de varios niveles de velocidad configurables para el movimien
 | Velocity High | Desplazamientos amplios en zonas despejadas | Movimiento rápido para recorridos largos |
 | Incremental Step | Ajustes finos de alta precisión | Desplazamientos en pasos pequeños definidos por el operador |
 
-## Cambio entre niveles de velocidad
+**Cambio entre niveles de velocidad**
 
 El cambio de velocidad se realiza desde la sección de control del jog en EPSON RC+, donde el operador puede seleccionar el nivel deseado mediante un control deslizante o selector numérico asociado a la velocidad de los movimientos manuales. La velocidad seleccionada afecta tanto al modo articular como al cartesiano.
 
 Cada cambio se refleja de forma inmediata en la respuesta del robot, permitiendo adaptar el comportamiento del movimiento según la fase de trabajo.
 
-## Identificación del nivel activo
+**Identificación del nivel activo**
 
 El nivel de velocidad activo se visualiza directamente en la interfaz gráfica de EPSON RC+, usualmente junto al panel de jog o en la barra de estado, indicando el valor porcentual o la categoría seleccionada (Low, Medium, High).
 
 Esto permite al operador tener control visual constante sobre el estado dinámico del robot, reduciendo el riesgo de movimientos bruscos o no deseados.
 
-## Consideraciones de uso
+**Consideraciones de uso**
 
 - Para acercamientos finales al huevo se recomienda utilizar niveles bajos o pasos incrementales.
 - Las velocidades medias son adecuadas para transiciones entre posiciones dentro de la cubeta.
@@ -141,11 +141,11 @@ Esto permite al operador tener control visual constante sobre el estado dinámic
 
 La correcta selección del nivel de velocidad contribuye significativamente a la seguridad del proceso, al control fino del manipulado y a la ejecución estable de la rutina bajo el patrón de movimiento del caballo.
 
-# EPSON RC+ 7.0: funcionalidades y comunicación con el manipulador EPSON T3-401S
+## EPSON RC+ 7.0: funcionalidades y comunicación con el manipulador EPSON T3-401S
 
 EPSON RC+ 7.0 es el entorno de software utilizado para la programación, control y supervisión del manipulador EPSON T3-401S. Desde este sistema, ejecutado en el computador, se realizan tanto los movimientos manuales como la creación y ejecución de rutinas automáticas, funcionando como interfaz principal entre el operador y el robot. El software permite gestionar la configuración del robot, definir parámetros de movimiento, enseñar puntos, programar secuencias y monitorear el estado del sistema en tiempo real, consolidándose como la herramienta central para la operación del manipulador durante el laboratorio.
 
-## Funcionalidades principales
+**Funcionalidades principales**
 
 EPSON RC+ 7.0 ofrece un conjunto de herramientas orientadas al control completo del sistema robótico, entre las cuales se destacan:
 
@@ -160,7 +160,7 @@ EPSON RC+ 7.0 ofrece un conjunto de herramientas orientadas al control completo 
 
 Estas funcionalidades permiten estructurar de manera ordenada la lógica de la rutina requerida para el movimiento de los huevos siguiendo el patrón de caballo.
 
-## Comunicación con el manipulador
+**Comunicación con el manipulador**
 
 La comunicación entre EPSON RC+ 7.0 y el manipulador EPSON T3-401S se realiza a través del controlador del robot, estableciendo un enlace directo que permite el envío y recepción de comandos en tiempo real. El flujo básico de comunicación se desarrolla de la siguiente forma:
 
@@ -173,7 +173,7 @@ La comunicación entre EPSON RC+ 7.0 y el manipulador EPSON T3-401S se realiza a
 
 Este proceso asegura que las trayectorias programadas sean ejecutadas con precisión y bajo supervisión constante.
 
-## Ejecución de movimientos mediante EPSON RC+
+**Ejecución de movimientos mediante EPSON RC+**
 
 Durante la ejecución de una rutina, EPSON RC+ realiza los siguientes procesos:
 
@@ -185,11 +185,11 @@ Durante la ejecución de una rutina, EPSON RC+ realiza los siguientes procesos:
 
 De esta manera, EPSON RC+ no solo actúa como interfaz gráfica, sino como sistema integral de control que gestiona la cinemática, la seguridad y la lógica de operación del manipulador. La correcta utilización de EPSON RC+ 7.0 resulta esencial para garantizar que la rutina de desplazamiento de huevos se ejecute de manera segura, precisa y coherente con el patrón de movimiento definido.
 
-# Análisis comparativo entre EPSON RC+ 7.0, RoboDK y RobotStudio
+## Análisis comparativo entre EPSON RC+ 7.0, RoboDK y RobotStudio
 
 Las herramientas EPSON RC+ 7.0, RoboDK y RobotStudio cumplen funciones similares dentro del entorno de la robótica industrial, pero están orientadas a enfoques y niveles de integración distintos. Su comparación permite entender cómo cada una condiciona la forma de programar, simular y operar un manipulador.
 
-## Comparación general
+**Comparación general**
 
 | Criterio | EPSON RC+ 7.0 | RoboDK | RobotStudio |
 |----------|---------------|--------|-------------|
@@ -200,23 +200,23 @@ Las herramientas EPSON RC+ 7.0, RoboDK y RobotStudio cumplen funciones similares
 | Fidelidad entre simulación y robot | Alta dentro del entorno EPSON | Variable según robot y post | Muy alta |
 | Uso en laboratorio | Operación física real del robot | Diseño y simulación de trayectorias | Validación avanzada de celdas ABB |
 
-## EPSON RC+ 7.0
+**EPSON RC+ 7.0**
 
 EPSON RC+ 7.0 es una herramienta orientada al control directo y específico del manipulador EPSON. Su principal fortaleza radica en la integración nativa con el hardware, lo que permite supervisar, programar y ejecutar movimientos con altos niveles de precisión y seguridad. Es especialmente útil cuando el objetivo es operar físicamente el robot y validar su comportamiento real en el entorno de trabajo. Sin embargo, su uso se encuentra limitado al ecosistema EPSON, lo que restringe su aplicabilidad en contextos multimarca o en simulaciones previas complejas fuera del hardware real.
 
-## RoboDK
+**RoboDK**
 
 RoboDK se caracteriza por su flexibilidad y enfoque en programación offline. Permite diseñar trayectorias complejas, simular movimientos y generar código para distintos fabricantes desde una sola plataforma. Su principal ventaja es la rapidez con la que se pueden desarrollar y visualizar trayectorias, lo que resulta ideal para entornos académicos y procesos de prototipado. No obstante, la fidelidad entre simulación y ejecución real depende del post-procesador y del robot, por lo que no siempre replica con exactitud el comportamiento físico del manipulador.
 
-## RobotStudio
+**RobotStudio**
 
 RobotStudio es una herramienta altamente especializada para robots ABB. Su mayor fortaleza reside en el uso de un controlador virtual que replica con gran precisión el funcionamiento del robot real, permitiendo pruebas detalladas de programas RAPID antes de su ejecución física. Su limitación principal es su exclusividad con robots ABB, lo que reduce su utilidad en entornos con múltiples marcas o cuando se trabaja con robots distintos al ecosistema ABB.
 
-## Interpretación técnica
+**Interpretación técnica**
 
 EPSON RC+ se posiciona como la herramienta más adecuada para la operación directa y control real del manipulador EPSON T3-401S. RoboDK destaca por su flexibilidad y facilidad de uso para el diseño inicial de trayectorias, mientras que RobotStudio se orienta a escenarios de validación exhaustiva en entornos ABB. En el contexto de este laboratorio, EPSON RC+ 7.0 resulta la herramienta central, ya que permite integrar la simulación, la programación y la ejecución física de la rutina de movimiento siguiendo el patrón de caballo, mientras que RoboDK y RobotStudio funcionan como referentes comparativos en cuanto a metodologías y capacidades de simululación.
 
-# Diseño del gripper neumático por vacío
+## Diseño del gripper neumático por vacío
 
 Para la manipulación de los huevos se diseñó e implementó un gripper neumático por vacío, con el objetivo de garantizar una sujeción estable sin comprometer la integridad estructural del objeto. El sistema fue seleccionado teniendo en cuenta el bajo peso del huevo, su fragilidad y la necesidad de un contacto uniforme que evitara concentraciones de esfuerzo. El gripper usado, utiliza una ventosa de succión conectada a un sistema neumático controlado mediante las entradas y salidas digitales del manipulador EPSON T3-401S. La activación y desactivación del vacío se realiza desde EPSON RC+ 7.0, permitiendo sincronizar la sujeción con las posiciones programadas durante la trayectoria.
 
@@ -224,7 +224,7 @@ A continuación se presenta el gripper físico implementado en el laboratorio, e
 
  **Gripper neumático implementado**
  
-# Diagrama de flujo de la rutina de movimiento con patrón de caballo
+## Diagrama de flujo de la rutina de movimiento con patrón de caballo
 
 El siguiente diagrama representa la lógica general utilizada para la ejecución de la rutina de movimiento de los huevos dentro de la cubeta, siguiendo estrictamente el patrón de desplazamiento del caballo en ajedrez y alternando entre los dos huevos en cada ciclo.
 
