@@ -246,5 +246,39 @@ K --> L{Quedan posiciones libres?}
 L -->|Sí| D
 L -->|No| M[Finalizar rutina]
 ```
+## Plano de planta de la ubicación de la cubeta y posiciones iniciales
+
+El plano de planta define la disposición espacial del manipulador EPSON T3-401S respecto a la cubeta de huevos de 30 posiciones (6x5) y la ubicación inicial de los dos huevos empleados en la rutina. La cubeta fue ubicada dentro del área operativa del robot, asegurando que todas las posiciones fueran alcanzables sin generar colisiones ni trayectorias forzadas. Los huevos se colocaron inicialmente en dos extremos opuestos de la matriz, permitiendo un recorrido alternado y ordenado bajo el patrón de movimiento del caballo.
+
+**Plano de planta**
+
+[Aquí se adjunta la imagen del plano de planta con la posición de la cubeta y huevos iniciales]
+
+## Análisis de inconvenientes en la ejecución del sistema
+
+Durante las pruebas realizadas en el manipulador EPSON T3-401S se evidenció un comportamiento inconsistente del sistema, en el cual la rutina funcionaba correctamente en ciertos ciclos, pero posteriormente se desconfiguraba y dejaba de ejecutarse de forma adecuada sobre el robot físico. Aunque la lógica del código cumplía con la secuencia definida y el patrón de movimiento del caballo estaba estructurado correctamente, haciendo posible una simulación exitosa, se observaron fallos progresivos en la ejecución, tales como desviaciones inesperadas, pérdida de precisión y respuestas erráticas en el seguimiento de la trayectoria.
+
+Una posible causa de este comportamiento puede estar asociada a la complejidad del código implementado, el cual incluye múltiples validaciones, cálculos de posiciones y alternancia entre huevos, lo que pudo generar sobrecarga en la interpretación y ejecución del sistema, especialmente en combinación con las limitaciones propias del hardware y del entorno de control.
+
+Adicionalmente, factores como:
+- Errores acumulativos de posicionamiento,
+- Saturación de tareas internas del controlador,
+- Tiempos de respuesta variables,
+- Sincronización con las señales del gripper,
+
+pudieron contribuir a la degradación del comportamiento durante la operación prolongada.
+
+A pesar de ello, se logró verificar la funcionalidad general del algoritmo y su correcta lógica estructural, evidenciando que el sistema cumple conceptualmente con la restricción del patrón de caballo, aunque requiere ajustes adicionales para mejorar su estabilidad y robustez en ejecuciones prolongadas.
+
+Este comportamiento resalta la importancia de considerar no sólo la validez lógica del código, sino también su impacto sobre el desempeño real del sistema físico, especialmente en entornos de control industrial.
+
+
+## Código en SPEL+
+
+El código realizado en EPSON RC+ 7.0 para el desarrollo de la actividad se puede encontrar dentro de la carpeta llamada *"Codigo"*.
+
+## Video explicativo
+
+Para un mayor detalle de la actividad realizada, se puede observar un video de la simulación en el programa [aquí](https://youtu.be/0JdNzMYcMH4?si=PPf1MCZRZ-cwHxok)
 
 
