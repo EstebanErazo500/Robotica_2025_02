@@ -224,6 +224,9 @@ A continuación se presenta el gripper físico implementado en el laboratorio, e
 
  **Gripper neumático implementado**
  
+ ![flujo1](Imagenes/Gripper.jpeg)
+
+ 
 ## Diagrama de flujo de la rutina de movimiento con patrón de caballo
 
 El siguiente diagrama representa la lógica general utilizada para la ejecución de la rutina de movimiento de los huevos dentro de la cubeta, siguiendo estrictamente el patrón de desplazamiento del caballo en ajedrez y alternando entre los dos huevos en cada ciclo.
@@ -252,6 +255,11 @@ El plano de planta define la disposición espacial del manipulador EPSON T3-401S
 
 **Plano de planta**
 
+![flujo1](Imagenes/EspacioEpson1.jpeg)
+![flujo1](Imagenes/EspacioEpson2.jpeg)
+![flujo1](Imagenes/EspacioEpson3.jpeg)
+![flujo1](Imagenes/EspacioEpson4.jpeg)
+
 [Aquí se adjunta la imagen del plano de planta con la posición de la cubeta y huevos iniciales]
 
 ## Análisis de inconvenientes en la ejecución del sistema
@@ -268,17 +276,15 @@ Adicionalmente, factores como:
 
 pudieron contribuir a la degradación del comportamiento durante la operación prolongada.
 
-A pesar de ello, se logró verificar la funcionalidad general del algoritmo y su correcta lógica estructural, evidenciando que el sistema cumple conceptualmente con la restricción del patrón de caballo, aunque requiere ajustes adicionales para mejorar su estabilidad y robustez en ejecuciones prolongadas.
-
-Este comportamiento resalta la importancia de considerar no sólo la validez lógica del código, sino también su impacto sobre el desempeño real del sistema físico, especialmente en entornos de control industrial.
+A pesar de ello, se logró verificar la funcionalidad general del algoritmo y su correcta lógica estructural, evidenciando que el sistema cumple conceptualmente con la restricción del patrón de caballo, aunque requiere ajustes adicionales para mejorar su estabilidad y robustez en ejecuciones prolongadas. Este comportamiento resalta la importancia de considerar no sólo la validez lógica del código, sino también su impacto sobre el desempeño real del sistema físico, especialmente en entornos de control industrial.
 
 
 ## Código en SPEL+
 
-El código realizado en EPSON RC+ 7.0 para el desarrollo de la actividad se puede encontrar dentro de la carpeta llamada *"Codigo"*.
+El código realizado en EPSON RC+ 7.0 para el desarrollo de la actividad se puede encontrar dentro del archivo llamado *"Codigo"*.
 
 ## Video explicativo
 
-Para un mayor detalle de la actividad realizada, se puede observar un video de la simulación en el programa [aquí](https://youtu.be/0JdNzMYcMH4?si=PPf1MCZRZ-cwHxok)
+Para un mayor detalle de la actividad realizada, se puede observar un video de la simulación en el programa [aquí](https://youtu.be/0w4i8Z4rHYc)
 
 
