@@ -1,1 +1,251 @@
 'Codigo en Spel+ para Laboratorio 3
+Global Integer i
+'Global Integer COLS, ROWS, NPTS
+Global Integer ZSAFE    ' mm por encima del plano de trabajo (-150). Ajusta si hace falta.
+' Estado global para tours A y B
+Global Integer visitedA(31)   ' 1..30
+Global Integer visitedB(31)   ' 1..30
+Global Integer idxA, idxB
+Global Integer countA, countB
+
+Function main
+    'COLS = 6
+    'ROWS = 5
+    'NPTS = COLS * ROWS
+ '   ZSAFE = 80
+	Motor On
+	Power High
+	Accel 100, 100 '%
+	Speed 100 '%
+	Home
+ 
+	
+	'Do
+		'If In_9 = On Then
+			Call Paletizado_01
+		'EndIf
+		
+	'Loop
+
+Fend
+Function RCToIdx(r As Integer, c As Integer)
+    RCToIdx = (r - 1) * 6 + c
+Fend
+Function InBounds(rr As Integer, cc As Integer)
+    If rr >= 1 And rr <= 5 And cc >= 1 And cc <= 6 Then
+        InBounds = 1
+    Else
+        InBounds = 0
+    EndIf
+Fend
+
+' who=0 consulta visitedA; who=1 consulta visitedB
+Function KnightCandidate(fromIdx As Integer, otherIdx As Integer, drow As Integer, dcol As Integer, who As Integer)
+    Integer r, ce, nr, nc, idx, res
+
+    res = 0
+
+    ' --- Convertir índice lineal (fromIdx) a fila/columna (r, ce) ---
+    r = 1
+    ce = fromIdx
+    Do While ce > 6
+        ce = ce - 6
+        r = r + 1
+    Loop
+
+    ' --- Aplicar desplazamiento de caballo ---
+    nr = r + drow
+    nc = ce + dcol
+
+    ' --- 1) Debe quedar dentro del tablero ---
+    If InBounds(nr, nc) <> 0 Then
+
+        ' Convertir (nr, nc) de nuevo a índice 1..NPTS
+        idx = RCToIdx(nr, nc)
+
+        ' --- 2) No puede caer donde está el otro huevo ---
+        If idx <> otherIdx Then
+
+            ' --- 3) No puede ser una casilla ya visitada por ese caballo ---
+            If who = 0 Then
+                ' caballo A
+                If visitedA(idx) = 0 Then
+                    res = idx
+                EndIf
+            Else
+                ' caballo B
+                If visitedB(idx) = 0 Then
+                    res = idx
+                EndIf
+            EndIf
+
+        EndIf
+    EndIf
+
+    KnightCandidate = res
+Fend
+
+
+' Orden fijo de offsets (?fila, ?col): prueba 8 saltos y devuelve el primero válido
+Function NextKnight(fromIdx As Integer, otherIdx As Integer, who As Integer)
+    Integer idx, res
+
+    res = 0
+
+    ' 1) (+1, +2)
+    idx = KnightCandidate(fromIdx, otherIdx, +1, +2, who)
+    If idx <> 0 Then
+        res = idx
+    EndIf
+
+    ' 2) (+2, +1)
+    If res = 0 Then
+        idx = KnightCandidate(fromIdx, otherIdx, +2, +1, who)
+        If idx <> 0 Then
+            res = idx
+        EndIf
+    EndIf
+
+    ' 3) (-1, +2)
+    If res = 0 Then
+        idx = KnightCandidate(fromIdx, otherIdx, -1, +2, who)
+        If idx <> 0 Then
+            res = idx
+        EndIf
+    EndIf
+
+    ' 4) (-2, +1)
+    If res = 0 Then
+        idx = KnightCandidate(fromIdx, otherIdx, -2, +1, who)
+        If idx <> 0 Then
+            res = idx
+        EndIf
+    EndIf
+
+    ' 5) (+1, -2)
+    If res = 0 Then
+        idx = KnightCandidate(fromIdx, otherIdx, +1, -2, who)
+        If idx <> 0 Then
+            res = idx
+        EndIf
+    EndIf
+
+    ' 6) (+2, -1)
+    If res = 0 Then
+        idx = KnightCandidate(fromIdx, otherIdx, +2, -1, who)
+        If idx <> 0 Then
+            res = idx
+        EndIf
+    EndIf
+
+    ' 7) (-1, -2)
+    If res = 0 Then
+        idx = KnightCandidate(fromIdx, otherIdx, -1, -2, who)
+        If idx <> 0 Then
+            res = idx
+        EndIf
+    EndIf
+
+    ' 8) (-2, -1)
+    If res = 0 Then
+        idx = KnightCandidate(fromIdx, otherIdx, -2, -1, who)
+        If idx <> 0 Then
+            res = idx
+        EndIf
+    EndIf
+
+    NextKnight = res
+Fend
+
+Function Paletizado_01
+    Integer turn
+    Integer paso
+    Integer nextIdx, j
+    Integer startA, startB
+
+    ' Construye el pallet 6x5 con los 3 puntos enseñados
+    Pallet 1, Origen, PuntoX, PuntoY, 6, 5
+
+    ' --- Inicialización de visitados ---
+    For j = 1 To 30
+        visitedA(j) = 0
+        visitedB(j) = 0
+    Next
+
+    ' Posiciones iniciales opuestas (1 y 30)
+    startA = RCToIdx(1, 1)
+    startB = RCToIdx(5, 6)
+
+    idxA = startA
+	visitedA(idxA) = 1
+	countA = 1
+
+	idxB = startB
+	visitedB(idxB) = 1
+	countB = 1
+
+    ' Llevar a alturas seguras sobre A y B (opcional visual)
+    Jump Pallet(1, idxA) :Z(ZSAFE)
+    Jump Pallet(1, idxB) :Z(ZSAFE)
+	On Out_9
+    ' --- Alternancia: cada huevo debe completar 30 celdas (60 movimientos en total) ---
+    turn = 0
+    For paso = 1 To 1000   ' tope de seguridad
+		
+        If (countA >= 30) And (countB >= 30) Then
+            Exit For
+        EndIf
+
+        If turn = 0 Then
+            ' ===== Mueve huevo A =====
+            If countA < 30 Then
+                nextIdx = NextKnight(idxA, idxB, 0)   ' who=0 ? A
+                If nextIdx <> 0 Then
+                    ' PICK A (desde idxA)
+                    Jump Pallet(1, idxA) :Z(ZSAFE)
+                    Move Pallet(1, idxA)
+                    Off Out_9
+                    Jump Pallet(1, idxA) :Z(ZSAFE)
+
+                    ' PLACE A (hacia nextIdx)
+                    Jump Pallet(1, nextIdx) :Z(ZSAFE)
+                    Move Pallet(1, nextIdx)
+                    Off Out_9
+                    Jump Pallet(1, nextIdx) :Z(ZSAFE)
+
+                    idxA = nextIdx
+                    visitedA(idxA) = 1
+                    countA = countA + 1
+                EndIf
+            EndIf
+            turn = 1
+
+        Else
+            ' ===== Mueve huevo B =====
+            If countB < 30 Then
+                nextIdx = NextKnight(idxB, idxA, 1)   ' who=1 ? B
+                If nextIdx <> 0 Then
+                    ' PICK B (desde idxB)
+                    Jump Pallet(1, idxB) :Z(ZSAFE)
+                    Move Pallet(1, idxB)
+                    Off Out_9
+                    Jump Pallet(1, idxB) :Z(ZSAFE)
+
+                    ' PLACE B (hacia nextIdx)
+                    Jump Pallet(1, nextIdx) :Z(ZSAFE)
+                    Move Pallet(1, nextIdx)
+                    On Out_9
+                    Jump Pallet(1, nextIdx) :Z(ZSAFE)
+
+                    idxB = nextIdx
+                    visitedB(idxB) = 1
+                    countB = countB + 1
+                EndIf
+            EndIf
+            turn = 0
+        EndIf
+        On Out_9
+    Next
+
+    Home
+Fend
