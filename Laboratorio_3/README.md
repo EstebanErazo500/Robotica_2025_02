@@ -255,12 +255,10 @@ El plano de planta define la disposición espacial del manipulador EPSON T3-401S
 
 **Plano de planta**
 
-![flujo1](Imagenes/EspacioEpson1.jpeg)
-![flujo1](Imagenes/EspacioEpson2.jpeg)
-![flujo1](Imagenes/EspacioEpson3.jpeg)
-![flujo1](Imagenes/EspacioEpson4.jpeg)
+<img src="Imagenes/EspacioEpson2.jpeg" alt="flujo1" width="350">
+<img src="Imagenes/EspacioEpson3.jpeg" alt="flujo1" width="350">
+<img src="Imagenes/EspacioEpson4.jpeg" alt="flujo1" width="350">
 
-[Aquí se adjunta la imagen del plano de planta con la posición de la cubeta y huevos iniciales]
 
 ## Análisis de inconvenientes en la ejecución del sistema
 
