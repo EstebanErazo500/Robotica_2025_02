@@ -222,8 +222,9 @@ Para la manipulación de los huevos se diseñó e implementó un gripper neumát
 A continuación se presenta el gripper físico implementado en el laboratorio, el cual fue utilizado para las pruebas de manipulación y la ejecución de la rutina con patrón de movimiento tipo caballo.
 
  **Gripper neumático implementado**
- 
- ![flujo1](Imagenes/Gripper.jpeg)
+
+ <img src="Imagenes/Gripper.jpeg" alt="flujo1" width="350">
+
 
  
 ## Diagrama de flujo de la rutina de movimiento con patrón de caballo
