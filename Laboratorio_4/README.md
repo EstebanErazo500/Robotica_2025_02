@@ -140,4 +140,3 @@ El código realizado en Python para el desarrollo de la actividad se puede encon
 
 Para un mayor detalle de la actividad realizada, se puede observar un video de la simulación en el programa, junto con su explicación [aquí](https://youtu.be/yO0ROJNMGEU)
 
-Contenido listo para ser adaptado directamente a diapositivas, manteniendo coherencia con el trabajo real y sin replicar de forma literal el formato del repositorio original.
