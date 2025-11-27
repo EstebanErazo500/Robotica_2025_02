@@ -1,9 +1,11 @@
 
-# Presentación – Laboratorio 04
+# Laboratorio No. 04
 
 ## Robótica de Desarrollo | Intro a ROS 2 con Turtlesim
 
-## 1. Punto de partida en GitHub
+* Edgar Esteban Erazo Lagos
+
+# Introducción
 
 Este laboratorio se construye a partir del repositorio compartido en GitHub por el grupo, donde se define la estructura del workspace y el flujo general de ejecución.
 
@@ -13,7 +15,6 @@ Se respetan los mismos comandos de compilación y ejecución descritos en el REA
 
 > Sugerencia visual: captura del repositorio en GitHub mostrando el archivo move_turtle.py.
 
----
 
 ## 2. Enfoque del laboratorio
 
