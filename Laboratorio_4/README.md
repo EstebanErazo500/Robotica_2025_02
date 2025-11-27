@@ -38,6 +38,10 @@ Cada letra se construye a partir de la posición en la que se encuentra la tortu
 
 Para evitar trazos no deseados entre letras, el nodo desactiva temporalmente el lápiz, se transporta a la tortuga a la nueva posición base y luego reanuda el dibujo. De este modo se logra que las letras aparezcan separadas y visualmente limpias.
 
+<img src="Imagenes/Error1TurtleSim.jpeg" alt="flujo1" width="350">
+
+> Pruebas previas de letras realizadas, con alineamiento no adecuado.
+
 **Letra E**
 
 La letra E se dibuja tomando como referencia la esquina inferior izquierda. Primero se traza una línea vertical ascendente que constituye el cuerpo principal de la letra. Posteriormente se dibujan tres líneas horizontales: una en la parte superior, una en la zona media y una en la base. Todas estas líneas parten desde el eje vertical, manteniendo proporciones visualmente coherentes.
@@ -49,6 +53,10 @@ Al finalizar la letra, la tortuga se reubica hacia la derecha, sin dejar rastro 
 La letra L se construye partiendo de la misma altura base que la letra E, garantizando alineación entre ambas. Se dibuja inicialmente una línea vertical hacia arriba y luego una línea horizontal inferior que completa la forma característica de la letra.
 
 Este proceso también se realiza sin generar trazos no deseados entre letras, conservando una presentación clara del resultado.
+
+<img src="Imagenes/TortugaSinError.jpg" alt="flujo1" width="350">
+
+> Letras realizadas, con alineamiento, y claridad adecuadas.
 
 **Flujo de ejecución**
 
@@ -126,7 +134,7 @@ El sistema desarrollado constituye una base funcional sobre la cual se pueden co
 
 ## 9. Código para TurtlleSim en ROS
 
-El código realizado en Python para el desarrollo de la actividad se puede encontrar como ...  dentro de la carpeta llamada *"Codigo"*.
+El código realizado en Python para el desarrollo de la actividad se puede encontrar como move_turtle.py  dentro de la carpeta llamada *"Codigo"*.
 
 ## 10. Video explicativo
 
