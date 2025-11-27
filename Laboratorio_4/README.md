@@ -1,7 +1,7 @@
 
 # Laboratorio No. 04
 
-## Robótica de Desarrollo | Intro a ROS 2 con Turtlesim
+##  Robótica de Desarrollo, Intro a ROS 2 Humble- Turtlesim
 
 * Edgar Esteban Erazo Lagos
 
@@ -71,7 +71,7 @@ El comportamiento general del nodo puede resumirse en el siguiente diagrama de f
 
 ```mermaid
 flowchart TD
-    A[Inicio del nodo] --> B[Inicializar publicadores y suscriptores]
+    A[Inicio del nodo] --> B[Preparar comunicación con la tortuga]
     B --> C[Activar hilo de lectura de teclado]
     C --> D{Esperar tecla}
 
