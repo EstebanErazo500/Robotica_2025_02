@@ -38,7 +38,7 @@ Cada letra se construye a partir de la posición en la que se encuentra la tortu
 
 Para evitar trazos no deseados entre letras, el nodo desactiva temporalmente el lápiz, se transporta a la tortuga a la nueva posición base y luego reanuda el dibujo. De este modo se logra que las letras aparezcan separadas y visualmente limpias.
 
-<img src="Imagenes/Error1TurtleSim.jpeg" alt="flujo1" width="350">
+<img src="Imagenes/Error1TurtleSimReal.jpeg" alt="flujo1" width="350">
 
 > Pruebas previas de letras realizadas, con alineamiento no adecuado.
 
