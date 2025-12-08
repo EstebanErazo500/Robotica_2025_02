@@ -1,151 +1,190 @@
-# Lab 05 – Cinemática directa PhantomX Pincher X100
+# Laboratorio 5 – Pincher Phantom X100- ROS Humble- RVIZ
 
-## 1. Descripción general
+* Edgar Esteban Erazo Lagos
+  
+## Introducción
 
-En este laboratorio se implementa y prueba la cinemática directa del robot PhantomX Pincher X100 usando ROS 2 y una interfaz gráfica en Python.  
-El objetivo es que el robot físico y el modelo digital en RViz muestren el mismo comportamiento cuando se mueven las articulaciones, tanto con controles manuales como con poses predefinidas.
+Este informe resume el trabajo realizado en el Laboratorio 5 de Robótica, donde se implementó y probó la cinemática directa del robot PhantomX Pincher X100 usando ROS 2 y una interfaz gráfica propia en Python. La idea no es solo mostrar que el robot se mueve, sino dejar claro cómo se hizo, y las implicaciones que esto tiene. 
 
-Se trabaja sobre el paquete `pincher_control`, que:
-- Se conecta a los servomotores Dynamixel.
-- Publica `joint_states` para RViz.
-- Calcula la pose del TCP con un modelo DH.
-- Ofrece una GUI con varias pestañas de control.
+A lo largo del documento se describen los principales componentes del sistema, como el nodo `pincher_controller`, GUI con pestañas para control articular y visualización, y la integración con RViz, junto con las pruebas que se hicieron en simulación y con el robot real. La intención es que la persona que abra este repositorio pueda comprender cómo reproducir el laboratorio y qué se hizo para que el PhantomX responda de forma estable y coherente con el modelo teórico.
 
 
-## 2. Hardware y software usados
+## 1. Descripción detallada de la solución planteada
 
-- Robot **PhantomX Pincher X100** con 5 grados de libertad.
-- Servomotores Dynamixel AX (configurados con:
+La solución propuesta para el Lab 05 consiste en un nodo de ROS 2 (`pincher_controller`) y una interfaz de usuario en Python (`PincherGUI`) que permiten mover el PhantomX Pincher X100 y ver su estado tanto en el robot real como en RViz.  
+La idea central es que el HMI cumpla con lo pedido en la guía:
+
+- Mostrar nombres y datos del integrante del grupo.
+- Permitir mover el robot en espacio articular con **sliders**.
+- Permitir mover el robot en espacio articular con **valores numéricos**.
+- Enviar **poses predefinidas** del laboratorio.
+- Visualizar el robot en RViz junto con la pose del TCP.
+- Tener una pestaña adicional para **control en espacio de la tarea** (XYZ + RPY).
+
+Todo esto se integra en un solo programa que abre el puerto serie, configura los servos Dynamixel y publica la información necesaria para que ROS 2 y RViz mantengan sincronizado el modelo digital con el brazo físico.
+
+---
+
+### 1.1. Hardware y software usados
+
+Para implementar la solución se usa:
+
+- Robot **PhantomX Pincher X100** de 5 GDL.
+- Servomotores Dynamixel AX, configurados con:
   - `PROTOCOL_VERSION = 1.0`
   - `baudrate = 57600`
-  - `dxl_ids = [1, 2, 3, 4, 5]`)
-- Adaptador USB–Serial para la cadena Dynamixel (`/dev/ttyUSB0`).
+  - `dxl_ids = [1, 2, 3, 4, 5]`
+- Adaptador USB–Serial para la cadena Dynamixel (dispositivo `/dev/ttyUSB0`).
 - Computador con:
-  - Ubuntu 22.04 en máquina virtual.
+  - Ubuntu 22.04 en máquina virtual (VMware).
   - ROS 2 Humble.
   - Python 3.10.
 - Paquetes ROS 2 relevantes:
-  - `pincher_control`
-  - `phantomx_pincher_description`
-  - `phantomx_pincher_interfaces` (para el mensaje `PoseCommand`).
+  - `pincher_control` (nodo de control + GUI).
+  - `phantomx_pincher_description` (URDF y launch de RViz).
+  - `phantomx_pincher_interfaces` (mensaje `PoseCommand` para el espacio de la tarea).
 
+Este conjunto de hardware y software permite cerrar el ciclo completo: desde el comando del usuario en la GUI, pasando por ROS 2, hasta el movimiento físico de los servos y la visualización del robot en RViz.
 
-## 3. Estructura del paquete `pincher_control`
+---
 
-El archivo principal es `control_servo.py`. Dentro se encuentran dos bloques grandes:
+### 1.2. Estructura del paquete `pincher_control`
+
+El archivo principal es `control_servo.py`. En él se definen dos componentes clave:
 
 - `class PincherController(Node)`  
   Nodo de ROS 2 que:
-  - Abre el puerto serie.
-  - Configura el torque, velocidad y posición inicial de los motores.
-  - Publica en `/joint_states`.
-  - Calcula la cinemática directa del TCP y la publica en `/tcp_pose`.
-  - Publica un `Marker` con texto para ver XYZ y RPY en RViz.
-  - (Opcional) Publica `PoseCommand` hacia MoveIt para control en espacio de la tarea.
+  - Abre el puerto serie y configura baudrate, torque, velocidad y posición inicial de los motores.
+  - Mantiene un vector `current_joint_positions` con los ángulos actuales de las articulaciones.
+  - Publica `JointState` en `/joint_states` para que `robot_state_publisher` y RViz actualicen el modelo.
+  - Calcula la cinemática directa del TCP con un modelo DH (link lengths `L1..L4`) y publica:
+    - `PoseStamped` en `/tcp_pose`.
+    - Un `Marker` de texto en `/tcp_pose_marker` con XYZ y RPY.
+  - (Opcional) Publica `PoseCommand` hacia MoveIt para probar control en espacio de la tarea.
 
 - `class PincherGUI`  
-  Interfaz gráfica en Tkinter con pestañas para:
-  - Control por sliders.
-  - Control por valores numéricos.
-  - Poses predefinidas del laboratorio.
-  - Visualización en RViz.
-  - Información del laboratorio.
-  - Control en espacio de la tarea (XYZ + RPY).
+  Interfaz en Tkinter que funciona como HMI del laboratorio. Organiza la interacción en pestañas:
+  - **Control por Sliders** (espacio articular con sliders).
+  - **Control por Valores** (espacio articular con valores numéricos).
+  - **Visualización RViz** (lanza y detiene RViz).
+  - **Control por Pose** (poses del laboratorio y poses personalizadas).
+  - **Espacio de la Tarea** (XYZ + RPY hacia `pose_command`).
+  - **Acerca de** (datos del estudiante y del curso).
 
+El nodo y la GUI se ejecutan en paralelo: ROS 2 corre en un hilo con `rclpy.spin`, mientras que la interfaz gráfica corre en el hilo principal con `tkinter.mainloop`.
 
-## 4. Interfaz gráfica – control articular
+---
 
-### 4.1 Pestaña 1 – Control por sliders
+### 1.3. Interfaz gráfica – control articular
 
-En esta pestaña se mueven las articulaciones en tiempo real con sliders en grados:
+Esta parte del HMI cubre las dos primeras pestañas que pide la guía: control por sliders y control por ingreso numérico.
+
+#### 1.3.1. Pestaña 1 – Control por sliders
+
+En esta pestaña se mueven las articulaciones en tiempo real usando sliders en grados:
 
 - Cada motor tiene:
   - Etiqueta `Motor i`.
-  - Slider de ángulo en el rango de `MIN_ANGLE_DEG` a `MAX_ANGLE_DEG`.
+  - Slider de ángulo en el rango `MIN_ANGLE_DEG` a `MAX_ANGLE_DEG`.
   - Etiqueta con la posición actual en grados.
-- Debajo hay un slider global de velocidad:
-  - Si la velocidad es 0, no se envían comandos a los motores.
-  - La velocidad se aplica a todos los motores por medio de `update_speed`.
+- Debajo hay un slider global de **velocidad**:
+  - Si la velocidad es 0, no se envían comandos a los servos.
+  - La velocidad se aplica a todos los motores a través de `update_speed`.
 
-El movimiento pasa por `degrees_to_dxl` y luego por `move_motor`, que:
-- Actualiza `current_joint_positions` para que RViz se mantenga sincronizado.
-- Envía los ticks al servo si hay hardware disponible.
+Cuando el usuario mueve un slider, se ejecuta `on_motor_slider_change`, que:
 
-### 4.2 Pestaña 2 – Control por valores manuales
+1. Toma el ángulo en grados.
+2. Lo convierte a ticks con `degrees_to_dxl`.
+3. Llama a `move_motor`, que:
+   - Actualiza `current_joint_positions` (para que RViz se sincronice).
+   - Envía el valor al servo si el hardware está disponible.
 
-En esta pestaña se mueven los motores escribiendo directamente el ángulo en grados:
+#### 1.3.2. Pestaña 2 – Control por valores manuales
+
+En esta pestaña se ingresa directamente el ángulo deseado para cada articulación:
 
 - Para cada motor:
-  - Campo de texto con el ángulo.
-  - Botón "Mover Motor".
-  - Etiqueta de estado ("Listo", "Enviado", errores de rango, etc.).
-- Hay un botón "MOVER TODOS LOS MOTORES" que:
+  - Campo de texto con el ángulo en grados.
+  - Botón **Mover Motor**.
+  - Etiqueta de estado (“Listo”, “Enviado”, errores de rango, etc.).
+- Hay un botón **MOVER TODOS LOS MOTORES** que:
   - Lee todos los campos.
-  - Convierte a ticks.
-  - Envia el comando a cada servo, si están dentro de los límites.
+  - Verifica que los ángulos estén dentro de los límites.
+  - Convierte a ticks y envía el comando a cada servo.
 
-La pestaña comparte el mismo control de velocidad que la pestaña 1, y actualiza los sliders cuando se envían nuevos comandos.
+La pestaña 2 usa el mismo slider de velocidad que la pestaña 1.  
+Cuando se mueven los motores desde aquí, se actualizan también los sliders de la pestaña de control por sliders para mantener la coherencia visual.
 
+---
 
-## 5. Visualización en RViz
+### 1.4. Visualización en RViz
 
-### 5.1 Pestaña 3 – RViz
+Esta parte corresponde a la pestaña de visualización pedida en la guía.
 
-Esta pestaña sirve para lanzar y detener RViz desde la GUI:
+#### 1.4.1. Pestaña 3 – Visualización en RViz
+
+La pestaña muestra botones para lanzar y detener RViz:
 
 - Botón **LANZAR RViz**:
   - Ejecuta:
     ```bash
     ros2 launch phantomx_pincher_description view.launch.py
     ```
-  - Abre el modelo del PhantomX Pincher X100 y el `robot_state_publisher`.
+  - Abre el modelo URDF del PhantomX Pincher X100 y el `robot_state_publisher`.
 - Botón **DETENER RViz**:
-  - Termina el proceso lanzado.
+  - Termina el proceso lanzado en segundo plano.
   - Actualiza el estado de la interfaz.
 
-Además, el nodo `PincherController`:
+Mientras tanto, el nodo `PincherController` mantiene actualizada la visualización publicando:
 
-- Publica `JointState` en `/joint_states`.
-- Publica `PoseStamped` del TCP en `/tcp_pose`.
-- Publica un `Marker` con texto en `/tcp_pose_marker` para ver coordenadas y ángulos del efector final.
+- `JointState` en `/joint_states` con las posiciones articulares.
+- `PoseStamped` en `/tcp_pose` con la posición y orientación del TCP.
+- Un `Marker` de texto en `/tcp_pose_marker` con XYZ y RPY en grados.
 
+De esta forma, cualquier movimiento ordenado desde la GUI se refleja tanto en el robot físico como en el modelo de RViz.
 
-## 6. Poses del laboratorio y control global
+---
 
-### 6.1 Poses del laboratorio
+### 1.5. Poses del laboratorio y control global
 
-En la pestaña de **Control por pose** se definen:
+Esta sección agrupa la pestaña de **Control por Pose** y los botones globales de la parte inferior del HMI.
 
-- Cinco poses "Lab" usadas en la guía del laboratorio:
-  - Pose Lab 1: `[0, 0, 0, 0, 0]`.
-  - Pose Lab 2: `[25, 25, 20, -20, 0]`.
-  - Pose Lab 3: `[-35, 35, -30, 30, 0]`.
-  - Pose Lab 4: `[85, -20, 55, 25, 0]`.
-  - Pose Lab 5: `[80, -35, 55, -45, 0]`.
-- Dos poses personalizadas:
-  - Pose 6: `[10, 20, 30, 40, 50]`.
-  - Pose 7: `[-10, -20, -30, -40, -50]`.
+#### 1.5.1. Pestaña 4 – Poses del laboratorio
+
+Se implementan cinco poses “Lab” tomadas de la guía y dos poses personalizadas:
+
+- Pose Lab 1: `[0, 0, 0, 0, 0]`.
+- Pose Lab 2: `[25, 25, 20, -20, 0]`.
+- Pose Lab 3: `[-35, 35, -30, 30, 0]`.
+- Pose Lab 4: `[85, -20, 55, 25, 0]`.
+- Pose Lab 5: `[80, -35, 55, -45, 0]`.
+- Pose 6 (personalizada): `[10, 20, 30, 40, 50]`.
+- Pose 7 (personalizada): `[-10, -20, -30, -40, -50]`.
 
 Cada botón llama a `start_pose_sequence`, que:
 
-- Recorre los motores en orden (o en orden inverso, según la pose).
-- Envía los ángulos uno por uno con retraso entre articulaciones.
-- Actualiza el estado del botón y la etiqueta de estado general.
+1. Construye una secuencia de `(motor_id, ángulo)` en el orden deseado (base → extremo o al revés).
+2. Convierte cada ángulo a ticks.
+3. Mueve los motores uno por uno con un retardo entre articulaciones.
+4. Actualiza el estado del botón y de la etiqueta global para indicar que la secuencia está en ejecución o completada.
 
-### 6.2 Botones HOME y parada de emergencia
+#### 1.5.2. Botones HOME y parada de emergencia
 
-En la parte inferior de la ventana hay dos botones globales:
+En la parte inferior de la ventana principal hay dos botones globales:
 
-- **HOME**:
+- **HOME**  
   - Llama a `home_all_motors`.
-  - Lleva todos los motores a `DEFAULT_GOAL`, que corresponde a 0° en la GUI.
-  - Sincroniza sliders y campos de texto a 0.
+  - Envía a todos los motores a `DEFAULT_GOAL` (equivalente a 0° en la GUI).
+  - Sincroniza sliders y campos de texto para mostrar 0° en cada articulación.
 
-- **PARADA DE EMERGENCIA**:
+- **PARADA DE EMERGENCIA**  
   - Llama a `emergency_stop`.
   - Desactiva el torque de todos los motores.
-  - Cambia los mensajes de estado a "EMERGENCIA".
-  - Para volver a mover el robot, se reactivan torques llamando a `home_all_motors` o a la lógica de reactivación.
+  - Cambia los mensajes de estado a “EMERGENCIA” y bloquea el movimiento.
+  - Para volver a operar, se reactiva el sistema y se lleva el robot a HOME.
+
+Con esto, la solución propuesta cubre los requisitos de la guía: control articular por sliders y por valores, selección de poses, visualización en RViz y manejo seguro del robot físico.
+
 
 
 ## 7. Plano de planta y distribución de elementos
