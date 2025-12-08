@@ -177,54 +177,76 @@ En la parte inferior de la ventana principal hay dos botones globales:
   - Cambia los mensajes de estado a “EMERGENCIA” y bloquea el movimiento.
   - Para volver a operar, se reactiva el sistema y se lleva el robot a HOME.
 
-Con esto, la solución propuesta cubre los requisitos de la guía: control articular por sliders y por valores, selección de poses, visualización en RViz y manejo seguro del robot físico.
+Con esto, la solución propuesta cubre los requisitos de la guía los cuales control articular por sliders y por valores, selección de poses, visualización en RViz y manejo seguro del robot físico.
 
+
+
+## 2. Diagrama de flujo de acciones del robot
+
+En esta sección se resume el recorrido que sigue el sistema desde que se ejecuta el nodo control_servo hasta que el robot físico o la simulación responden a un comando de la interfaz. El diagrama se describe con Mermaid para poder verlo en GitHub de forma directa.
 
 ```mermaid
 flowchart TD
-    A[Inicio del sistema] --> B[Se lanza control_servo con ROS 2]
-    B --> C[Inicializar PincherController]
-    C --> D{Hardware disponible}
+    %% INICIO DEL SISTEMA
+    A[Usuario lanza<br>ros2 run pincher_control control_servo] --> B[Se crea el nodo<br>PincherController y se abre el puerto serie]
+    B --> C{¿Puerto y baudrate correctos?}
 
-    D -->|No| E[Trabajar solo en simulación sin escribir en servos]
-    D -->|Sí| F[Robot listo con puerto serie abierto y torque activo]
+    C -->|No| D[No se puede usar el bus Dynamixel<br>Se activa modo solo simulación<br>No se escriben servos físicos]
+    C -->|Sí| E[Puerto /dev/ttyUSB0 abierto<br>Baudrate 57600 configurado<br>Servos listos]
 
-    F --> G{Tipo de comando enviado desde la GUI}
-    E --> G
+    %% ENTRADA DESDE LA GUI
+    D --> F[Usuario usa la GUI<br>elige un tipo de acción]
+    E --> F
 
-    G -->|Control por sliders o valores articulares| H[Convertir grados a ticks Dynamixel]
-    G -->|Pose del laboratorio o pose personalizada| I[Ejecutar secuencia motor por motor]
-    G -->|Comando en espacio de la tarea| J[Publicar mensaje PoseCommand hacia MoveIt]
-    G -->|Botón HOME| K[Enviar todos los motores a posición de referencia]
-    G -->|Parada de emergencia| L[Desactivar torque en todos los motores]
+    F --> G[Movimiento articular<br>con sliders o valores]
+    F --> H[Pose de laboratorio<br>o pose personalizada]
+    F --> I[Botón HOME]
+    F --> J[Parada de emergencia]
+    F --> K[Comando en espacio<br>de la tarea para MoveIt]
 
-    H --> M[Actualizar current_joint_positions]
-    I --> M
-    K --> M
+    %% ACCIONES SEGÚN TIPO DE COMANDO
+    G --> L[Convertir grados a ticks Dynamixel<br>y llamar move_motor]
+    H --> M[Ejecutar secuencia motor por motor<br>con start_pose_sequence]
+    I --> N[Enviar todos los motores<br>a la posición HOME]
+    J --> O[Desactivar torque en todos los motores<br>guardar estado de emergencia]
+    K --> P[Publicar mensaje PoseCommand<br>en el tópico pose_command]
 
-    M --> N[Publicar JointState en el tópico joint_states]
-    M --> O[Calcular cinemática directa del TCP]
-    O --> P[Publicar pose en tcp_pose y texto en tcp_pose_marker]
+    %% MOVIMIENTO REAL O SOLO SIMULACIÓN
+    L --> Q[Si hay hardware<br>los servos reciben nuevos ticks y se mueven<br>Si no hay hardware solo cambia el modelo interno]
+    M --> Q
+    N --> Q
 
-    J --> Q[MoveIt planifica y ejecuta la trayectoria en el robot]
-    N --> R[RViz actualiza el modelo del PhantomX]
-    P --> R
-    Q --> R
+    %% ACTUALIZACIÓN DEL MODELO INTERNO
+    L --> R[Actualizar arreglo<br>current_joint_positions]
+    M --> R
+    N --> R
+
+    R --> S[Publicar JointState<br>en el tópico joint_states]
+    S --> T{¿RViz lanzado con<br>ros2 launch phantomx_pincher_description view.launch.py?}
+
+    T -->|Sí| U[RViz recibe joint_states<br>y muestra el modelo PhantomX<br>con la misma postura que el robot]
+    T -->|No| V[No hay visualización en RViz<br>El robot físico sigue funcionando igual]
+
+    %% MOVEIT EN ESPACIO DE LA TAREA
+    P --> W[MoveIt recibe PoseCommand<br>planifica una trayectoria<br>y la ejecuta en robot o simulación]
+    W --> U
+
 ```
 
-## 7. Plano de planta y distribución de elementos
+## 3. Plano de planta y distribución de elementos
 
-En esta sección se documenta cómo está organizado el montaje físico sobre la mesa:
+En esta sección se documenta cómo está organizado el montaje del robot, por tanto se adjuntaran imagenes físicas como del RViz donde se puedan apreciar sus componentes: 
+
+<img src="Imagenes/TortugaSinError.jpg" alt="flujo1" width="350">
 
 - Posición del PhantomX Pincher X100 respecto al borde de la mesa.
-- Ubicación del computador y la pantalla desde donde se opera la GUI.
 - Ruta de los cables de alimentación y comunicación para que no interfieran con el movimiento.
 - Zona segura alrededor del brazo para evitar golpes con objetos cercanos.
 
-Espacio para imagen del plano de planta con el robot, la mesa y los elementos principales.
+<img src="Imagenes/TortugaSinError.jpg" alt="flujo1" width="350">
 
 
-## 8. Resumen de funciones principales del código
+## 4. Resumen de funciones principales del código
 
 Aquí se resumen las funciones principales usadas en este laboratorio y su propósito:
 
@@ -238,7 +260,7 @@ Aquí se resumen las funciones principales usadas en este laboratorio y su prop�
   Conversión entre ticks y grados para que la GUI sea intuitiva.
 
 - `move_motor(...)`  
-  Actualiza la posición interna de la articulación y envía el comando al servo (si hay hardware).
+  Actualiza la posición interna de la articulación y envía el comando al servo, esto si el hardware se encuentra conectado.
 
 - `update_speed(...)` y `update_speed_single_motor(...)`  
   Ajustan la velocidad de todos los motores o de un motor específico.
@@ -261,15 +283,14 @@ Aquí se resumen las funciones principales usadas en este laboratorio y su prop�
 - `start_pose_sequence(...)` y `run_pose_step(...)`  
   Ejecutan las poses predefinidas del laboratorio, respetando velocidad y estado de emergencia.
 
+## 5. Comparación de las poses del robot entre la prueba en físico y la simulación en la misma configuración.
 
-## 9. Cómo ejecutar el laboratorio
 
-**Compilación del paquete**
+## 6. Código para manejo del Pincher Phantom X100 con ROS Humble
 
-Desde el espacio de trabajo:
+El código realizado en Python para el desarrollo de la actividad se puede encontrar como ...  dentro de la carpeta llamada *"Codigo"*.
 
-```bash
-cd ~/Escritorio/KIT_Phantom_X_Pincher_ROS2/robotica-proyecto-final/phantom_ws
-colcon build --packages-select pincher_control
-source install/setup.bash
+## 7. Videos explicativos
 
+Para un mayor detalle de la actividad realizada, se puede observar dos videos, un video del brazo alcanzando cada posición solicitada [aquí](https://youtu.be/yO0ROJNMGEU);
+y otro video con la demostración de uso de la interfaz de usuario de la simulación en el programa, junto con su explicación [aquí](https://youtu.be/yO0ROJNMGEU)
