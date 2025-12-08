@@ -11,7 +11,7 @@ A lo largo del documento se describen los principales componentes del sistema, c
 
 ## 1. Descripción detallada de la solución planteada
 
-La solución propuesta para el Lab 05 consiste en un nodo de ROS 2 (`pincher_controller`) y una interfaz de usuario en Python (`PincherGUI`) que permiten mover el PhantomX Pincher X100 y ver su estado tanto en el robot real como en RViz.  
+La solución propuesta para el laboratorio 5 consiste en un nodo de ROS 2, el cuál es llamado `pincher_controller` y una interfaz de usuario en Python llamada `PincherGUI`, que permiten mover el PhantomX Pincher X100 y ver su estado tanto en el robot real como en RViz.  
 La idea central es que el HMI cumpla con lo pedido en la guía:
 
 - Mostrar nombres y datos del integrante del grupo.
@@ -23,7 +23,6 @@ La idea central es que el HMI cumpla con lo pedido en la guía:
 
 Todo esto se integra en un solo programa que abre el puerto serie, configura los servos Dynamixel y publica la información necesaria para que ROS 2 y RViz mantengan sincronizado el modelo digital con el brazo físico.
 
----
 
 ### 1.1. Hardware y software usados
 
@@ -34,19 +33,18 @@ Para implementar la solución se usa:
   - `PROTOCOL_VERSION = 1.0`
   - `baudrate = 57600`
   - `dxl_ids = [1, 2, 3, 4, 5]`
-- Adaptador USB–Serial para la cadena Dynamixel (dispositivo `/dev/ttyUSB0`).
+- Adaptador USB–Serial para la cadena Dynamixel.
 - Computador con:
-  - Ubuntu 22.04 en máquina virtual (VMware).
+  - Ubuntu 22.04 en máquina virtual llamada VMware.
   - ROS 2 Humble.
   - Python 3.10.
 - Paquetes ROS 2 relevantes:
-  - `pincher_control` (nodo de control + GUI).
-  - `phantomx_pincher_description` (URDF y launch de RViz).
-  - `phantomx_pincher_interfaces` (mensaje `PoseCommand` para el espacio de la tarea).
+  - `pincher_control` que son el nodo de control y GUI.
+  - `phantomx_pincher_description` esto es URDF y launch de RViz.
+  - `phantomx_pincher_interfaces` esto es mensaje `PoseCommand` para el espacio de la tarea.
 
 Este conjunto de hardware y software permite cerrar el ciclo completo: desde el comando del usuario en la GUI, pasando por ROS 2, hasta el movimiento físico de los servos y la visualización del robot en RViz.
 
----
 
 ### 1.2. Estructura del paquete `pincher_control`
 
@@ -57,23 +55,21 @@ El archivo principal es `control_servo.py`. En él se definen dos componentes cl
   - Abre el puerto serie y configura baudrate, torque, velocidad y posición inicial de los motores.
   - Mantiene un vector `current_joint_positions` con los ángulos actuales de las articulaciones.
   - Publica `JointState` en `/joint_states` para que `robot_state_publisher` y RViz actualicen el modelo.
-  - Calcula la cinemática directa del TCP con un modelo DH (link lengths `L1..L4`) y publica:
+  - Calcula la cinemática directa del TCP con un modelo DH, ejemplo link lengths `L1..L4` y publica:
     - `PoseStamped` en `/tcp_pose`.
     - Un `Marker` de texto en `/tcp_pose_marker` con XYZ y RPY.
-  - (Opcional) Publica `PoseCommand` hacia MoveIt para probar control en espacio de la tarea.
 
 - `class PincherGUI`  
   Interfaz en Tkinter que funciona como HMI del laboratorio. Organiza la interacción en pestañas:
-  - **Control por Sliders** (espacio articular con sliders).
-  - **Control por Valores** (espacio articular con valores numéricos).
-  - **Visualización RViz** (lanza y detiene RViz).
-  - **Control por Pose** (poses del laboratorio y poses personalizadas).
-  - **Espacio de la Tarea** (XYZ + RPY hacia `pose_command`).
-  - **Acerca de** (datos del estudiante y del curso).
+  - **Control por Sliders** es el espacio articular con sliders.
+  - **Control por Valores** es el espacio articular con valores numéricos.
+  - **Visualización RViz** lanza y detiene RViz.
+  - **Control por Pose** se muestran poses del laboratorio y poses personalizadas.
+  - **Espacio de la Tarea** describe XYZ + RPY hacia `pose_command`.
+  - **Acerca de** son datos del estudiante y del curso.
 
 El nodo y la GUI se ejecutan en paralelo: ROS 2 corre en un hilo con `rclpy.spin`, mientras que la interfaz gráfica corre en el hilo principal con `tkinter.mainloop`.
 
----
 
 ### 1.3. Interfaz gráfica – control articular
 
@@ -96,7 +92,7 @@ Cuando el usuario mueve un slider, se ejecuta `on_motor_slider_change`, que:
 1. Toma el ángulo en grados.
 2. Lo convierte a ticks con `degrees_to_dxl`.
 3. Llama a `move_motor`, que:
-   - Actualiza `current_joint_positions` (para que RViz se sincronice).
+   - Actualiza `current_joint_positions` esto para que RViz se sincronice.
    - Envía el valor al servo si el hardware está disponible.
 
 #### 1.3.2. Pestaña 2 – Control por valores manuales
@@ -106,7 +102,7 @@ En esta pestaña se ingresa directamente el ángulo deseado para cada articulaci
 - Para cada motor:
   - Campo de texto con el ángulo en grados.
   - Botón **Mover Motor**.
-  - Etiqueta de estado (“Listo”, “Enviado”, errores de rango, etc.).
+  - Etiqueta de estado tales como “Listo”, “Enviado”, errores de rango, etc.
 - Hay un botón **MOVER TODOS LOS MOTORES** que:
   - Lee todos los campos.
   - Verifica que los ángulos estén dentro de los límites.
@@ -115,7 +111,6 @@ En esta pestaña se ingresa directamente el ángulo deseado para cada articulaci
 La pestaña 2 usa el mismo slider de velocidad que la pestaña 1.  
 Cuando se mueven los motores desde aquí, se actualizan también los sliders de la pestaña de control por sliders para mantener la coherencia visual.
 
----
 
 ### 1.4. Visualización en RViz
 
@@ -143,7 +138,6 @@ Mientras tanto, el nodo `PincherController` mantiene actualizada la visualizaci�
 
 De esta forma, cualquier movimiento ordenado desde la GUI se refleja tanto en el robot físico como en el modelo de RViz.
 
----
 
 ### 1.5. Poses del laboratorio y control global
 
@@ -151,7 +145,7 @@ Esta sección agrupa la pestaña de **Control por Pose** y los botones globales 
 
 #### 1.5.1. Pestaña 4 – Poses del laboratorio
 
-Se implementan cinco poses “Lab” tomadas de la guía y dos poses personalizadas:
+Se implementan cinco poses tomadas de la guía del laboratorio 5 y dos poses personalizadas:
 
 - Pose Lab 1: `[0, 0, 0, 0, 0]`.
 - Pose Lab 2: `[25, 25, 20, -20, 0]`.
@@ -163,7 +157,7 @@ Se implementan cinco poses “Lab” tomadas de la guía y dos poses personaliza
 
 Cada botón llama a `start_pose_sequence`, que:
 
-1. Construye una secuencia de `(motor_id, ángulo)` en el orden deseado (base → extremo o al revés).
+1. Construye una secuencia de `(motor_id, ángulo)` en el orden deseado.
 2. Convierte cada ángulo a ticks.
 3. Mueve los motores uno por uno con un retardo entre articulaciones.
 4. Actualiza el estado del botón y de la etiqueta global para indicar que la secuencia está en ejecución o completada.
@@ -174,7 +168,7 @@ En la parte inferior de la ventana principal hay dos botones globales:
 
 - **HOME**  
   - Llama a `home_all_motors`.
-  - Envía a todos los motores a `DEFAULT_GOAL` (equivalente a 0° en la GUI).
+  - Envía a todos los motores a `DEFAULT_GOAL` esto es equivalente a 0° en la GUI.
   - Sincroniza sliders y campos de texto para mostrar 0° en cada articulación.
 
 - **PARADA DE EMERGENCIA**  
@@ -186,6 +180,37 @@ En la parte inferior de la ventana principal hay dos botones globales:
 Con esto, la solución propuesta cubre los requisitos de la guía: control articular por sliders y por valores, selección de poses, visualización en RViz y manejo seguro del robot físico.
 
 
+```mermaid
+flowchart TD
+    A[Inicio del sistema] --> B[Se lanza control_servo con ROS 2]
+    B --> C[Inicializar PincherController]
+    C --> D{Hardware disponible}
+
+    D -->|No| E[Trabajar solo en simulación sin escribir en servos]
+    D -->|Sí| F[Robot listo con puerto serie abierto y torque activo]
+
+    F --> G{Tipo de comando enviado desde la GUI}
+    E --> G
+
+    G -->|Control por sliders o valores articulares| H[Convertir grados a ticks Dynamixel]
+    G -->|Pose del laboratorio o pose personalizada| I[Ejecutar secuencia motor por motor]
+    G -->|Comando en espacio de la tarea| J[Publicar mensaje PoseCommand hacia MoveIt]
+    G -->|Botón HOME| K[Enviar todos los motores a posición de referencia]
+    G -->|Parada de emergencia| L[Desactivar torque en todos los motores]
+
+    H --> M[Actualizar current_joint_positions]
+    I --> M
+    K --> M
+
+    M --> N[Publicar JointState en el tópico joint_states]
+    M --> O[Calcular cinemática directa del TCP]
+    O --> P[Publicar pose en tcp_pose y texto en tcp_pose_marker]
+
+    J --> Q[MoveIt planifica y ejecuta la trayectoria en el robot]
+    N --> R[RViz actualiza el modelo del PhantomX]
+    P --> R
+    Q --> R
+```
 
 ## 7. Plano de planta y distribución de elementos
 
