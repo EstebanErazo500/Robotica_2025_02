@@ -187,49 +187,65 @@ En esta sección se resume el recorrido que sigue el sistema desde que se ejecut
 
 ```mermaid
 flowchart TD
-    %% INICIO DEL SISTEMA
-    A[Usuario lanza<br>ros2 run pincher_control control_servo] --> B[Se crea el nodo<br>PincherController y se abre el puerto serie]
-    B --> C{¿Puerto y baudrate correctos?}
 
-    C -->|No| D[No se puede usar el bus Dynamixel<br>Se activa modo solo simulación<br>No se escriben servos físicos]
-    C -->|Sí| E[Puerto /dev/ttyUSB0 abierto<br>Baudrate 57600 configurado<br>Servos listos]
+    %% ENTRADAS DESDE LA GUI
+    A1[Control por sliders o valores<br>de las articulaciones] 
+    A2[Botones de poses de laboratorio<br>y poses personalizadas]
+    A3[Botón HOME]
+    A4[Botón de parada de emergencia]
+    A5[Comando en espacio de la tarea<br>XYZ y orientación del TCP]
 
-    %% ENTRADA DESDE LA GUI
-    D --> F[Usuario usa la GUI<br>elige un tipo de acción]
-    E --> F
+    %% FLUJO FÍSICO – BRAZO REAL
+    subgraph F[Flujo físico – brazo PhantomX real]
+        F1[Calcular los ángulos objetivo<br>de cada articulación en grados]
+        F2[Convertir esos ángulos a valores<br>de ticks Dynamixel]
+        F3[Enviar los ticks por el puerto serie<br>a la cadena de servos]
+        F4[Los servos Dynamixel giran<br>y el brazo cambia de postura]
+    end
 
-    F --> G[Movimiento articular<br>con sliders o valores]
-    F --> H[Pose de laboratorio<br>o pose personalizada]
-    F --> I[Botón HOME]
-    F --> J[Parada de emergencia]
-    F --> K[Comando en espacio<br>de la tarea para MoveIt]
+    %% FLUJO VIRTUAL – MODELO EN RVIZ
+    subgraph V[Flujo virtual – modelo en RViz]
+        V1[Actualizar el modelo interno de ángulos<br>en el nodo PincherController]
+        V2[Enviar un mensaje JointState con esos ángulos<br>para que ROS conozca la postura actual]
+        V3[Si RViz está abierto<br>actualiza el modelo 3D del PhantomX<br>con la misma postura]
+    end
 
-    %% ACCIONES SEGÚN TIPO DE COMANDO
-    G --> L[Convertir grados a ticks Dynamixel<br>y llamar move_motor]
-    H --> M[Ejecutar secuencia motor por motor<br>con start_pose_sequence]
-    I --> N[Enviar todos los motores<br>a la posición HOME]
-    J --> O[Desactivar torque en todos los motores<br>guardar estado de emergencia]
-    K --> P[Publicar mensaje PoseCommand<br>en el tópico pose_command]
+    %% SEGURIDAD
+    subgraph S[Seguridad del sistema]
+        S1[Desactivar el torque de todos los motores<br>cuando se pulsa parada de emergencia]
+        S2[Marcar el sistema en estado de emergencia<br>y bloquear nuevos movimientos hasta reactivar]
+    end
 
-    %% MOVIMIENTO REAL O SOLO SIMULACIÓN
-    L --> Q[Si hay hardware<br>los servos reciben nuevos ticks y se mueven<br>Si no hay hardware solo cambia el modelo interno]
-    M --> Q
-    N --> Q
+    %% ESPACIO DE LA TAREA CON MOVEIT
+    subgraph M[Control en espacio de la tarea con MoveIt]
+        M1[Tomar X Y Z y orientación que el usuario escribe<br>en la pestaña Espacio de la tarea]
+        M2[Crear un mensaje PoseCommand con esa información<br>y publicarlo hacia MoveIt]
+        M3[MoveIt planifica una trayectoria con esa pose<br>y la ejecuta en el robot o en la simulación]
+    end
 
-    %% ACTUALIZACIÓN DEL MODELO INTERNO
-    L --> R[Actualizar arreglo<br>current_joint_positions]
-    M --> R
-    N --> R
+    %% CONEXIONES DESDE LA GUI HACIA LOS FLUJOS
+    A1 --> F1
+    A2 --> F1
+    A3 --> F1
 
-    R --> S[Publicar JointState<br>en el tópico joint_states]
-    S --> T{¿RViz lanzado con<br>ros2 launch phantomx_pincher_description view.launch.py?}
+    %% FÍSICO
+    F1 --> F2
+    F2 --> F3
+    F3 --> F4
 
-    T -->|Sí| U[RViz recibe joint_states<br>y muestra el modelo PhantomX<br>con la misma postura que el robot]
-    T -->|No| V[No hay visualización en RViz<br>El robot físico sigue funcionando igual]
+    %% VIRTUAL
+    F1 --> V1
+    V1 --> V2
+    V2 --> V3
 
-    %% MOVEIT EN ESPACIO DE LA TAREA
-    P --> W[MoveIt recibe PoseCommand<br>planifica una trayectoria<br>y la ejecuta en robot o simulación]
-    W --> U
+    %% EMERGENCIA
+    A4 --> S1
+    S1 --> S2
+
+    %% MOVEIT
+    A5 --> M1
+    M1 --> M2
+    M2 --> M3
 
 ```
 
