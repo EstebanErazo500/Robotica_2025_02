@@ -253,16 +253,19 @@ flowchart TD
 
 ## 3. Plano de planta y distribución de elementos
 
-En esta sección se documenta cómo está organizado el montaje del robot, por tanto se adjuntaran imagenes físicas como del RViz donde se puedan apreciar sus componentes: 
+En esta sección se documenta cómo está organizado el montaje del robot, por tanto se adjuntaran imagenes físicas, como del RViz donde se puedan apreciar sus componentes: 
 
-<img src="Imagenes/Captura de pantalla 2025-12-10 223854.png" alt="flujo1" width="350">
+<p align="center">
+<img src="Imagenes/Captura de pantalla 2025-12-10 223854.png" alt="flujo1" width="250">
+</p>
 
 - Posición del PhantomX Pincher X100 respecto al borde de la mesa.
 - Ruta de los cables de alimentación y comunicación para que no interfieran con el movimiento.
 - Zona segura alrededor del brazo para evitar golpes con objetos cercanos.
 
+<p align="center">
 <img src="Imagenes/Captura de pantalla 2025-12-10 223554.png" alt="flujo1" width="350">
-
+</p>
 
 ## 4. Resumen de funciones principales del código
 
@@ -304,28 +307,33 @@ Aquí se resumen las funciones principales usadas en este laboratorio y su prop�
 ## 5. Comparación de las poses del robot entre la prueba en físico y la simulación en la misma configuración.
 
 <p align="center">
-<img src="Imagenes/Captura de pantalla 2025-12-10 214359.png" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 214359.png" alt="flujo1" width="250">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222108.png" alt="flujo2" width="350">
 </p>
-
-<img src="Imagenes/Captura de pantalla 2025-12-10 214429.png" alt="flujo1" width="350">
+<p align="center">
+<img src="Imagenes/Captura de pantalla 2025-12-10 214429.png" alt="flujo1" width="250">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222125.png" alt="flujo2" width="350">
-
-<img src="Imagenes/Captura de pantalla 2025-12-10 214459.png" alt="flujo1" width="350">
+</p>
+<p align="center">
+<img src="Imagenes/Captura de pantalla 2025-12-10 214459.png" alt="flujo1" width="250">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222145.png" alt="flujo2" width="350">
-
-<img src="Imagenes/Captura de pantalla 2025-12-10 214716.png" alt="flujo1" width="350">
+</p>
+<p align="center">
+<img src="Imagenes/Captura de pantalla 2025-12-10 214716.png" alt="flujo1" width="250">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222205.png" alt="flujo2" width="350">
-
-<img src="Imagenes/Captura de pantalla 2025-12-10 214744.png" alt="flujo1" width="350">
+</p>
+<p align="center">
+<img src="Imagenes/Captura de pantalla 2025-12-10 214744.png" alt="flujo1" width="250">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222226.png" alt="flujo2" width="350">
-
-<img src="Imagenes/Captura de pantalla 2025-12-10 214815.png" alt="flujo1" width="350">
+</p>
+<p align="center">
+<img src="Imagenes/Captura de pantalla 2025-12-10 214815.png" alt="flujo1" width="250">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222243.png" alt="flujo2" width="350">
-
-<img src="Imagenes/Captura de pantalla 2025-12-10 214856.png" alt="flujo1" width="350">
+</p>
+<p align="center">
+<img src="Imagenes/Captura de pantalla 2025-12-10 214856.png" alt="flujo1" width="250">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222300.png" alt="flujo2" width="350">
-
+</p>
 
 ## 6. Código para manejo del Pincher Phantom X100 con ROS Humble
 
