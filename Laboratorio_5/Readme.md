@@ -310,42 +310,49 @@ Aquí se resumen las funciones principales usadas en este laboratorio y su prop�
 <img src="Imagenes/Captura de pantalla 2025-12-10 214359.png" alt="flujo1" width="250">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222108.png" alt="flujo2" width="350">
 </p>
+
 > Comparación de la Pose 1 en el robot PhantomX Pincher X100, imagen izquierda pose en poisición real e imagen derecha en posición simulada en RViz por medio de código; ambas activadas desde la interfaz.
 
 <p align="center">
 <img src="Imagenes/Captura de pantalla 2025-12-10 214429.png" alt="flujo1" width="250">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222125.png" alt="flujo2" width="350">
 </p>
+
 > Comparación de la Pose 2 en el robot PhantomX Pincher X100, imagen izquierda pose en poisición real e imagen derecha en posición simulada en RViz por medio de código; ambas activadas desde la interfaz.
 
 <p align="center">
 <img src="Imagenes/Captura de pantalla 2025-12-10 214459.png" alt="flujo1" width="250">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222145.png" alt="flujo2" width="350">
 </p>
+
 > Comparación de la Pose 3 en el robot PhantomX Pincher X100, imagen izquierda pose en poisición real e imagen derecha en posición simulada en RViz por medio de código; ambas activadas desde la interfaz.
 
 <p align="center">
 <img src="Imagenes/Captura de pantalla 2025-12-10 214716.png" alt="flujo1" width="250">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222205.png" alt="flujo2" width="350">
 </p>
+
 > Comparación de la Pose 4 en el robot PhantomX Pincher X100, imagen izquierda pose en poisición real e imagen derecha en posición simulada en RViz por medio de código; ambas activadas desde la interfaz.
 
 <p align="center">
 <img src="Imagenes/Captura de pantalla 2025-12-10 214744.png" alt="flujo1" width="250">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222226.png" alt="flujo2" width="350">
 </p>
+
 > Comparación de la Pose 5 en el robot PhantomX Pincher X100, imagen izquierda pose en poisición real e imagen derecha en posición simulada en RViz por medio de código; ambas activadas desde la interfaz.
 
 <p align="center">
 <img src="Imagenes/Captura de pantalla 2025-12-10 214815.png" alt="flujo1" width="250">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222243.png" alt="flujo2" width="350">
 </p>
+
 > Comparación de la Pose 6 personalizada en el robot PhantomX Pincher X100, imagen izquierda pose en poisición real e imagen derecha en posición simulada en RViz por medio de código; ambas activadas desde la interfaz.
 
 <p align="center">
 <img src="Imagenes/Captura de pantalla 2025-12-10 214856.png" alt="flujo1" width="250">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222300.png" alt="flujo2" width="350">
 </p>
+
 > Comparación de la Pose 7 personalizada en el robot PhantomX Pincher X100, imagen izquierda pose en poisición real e imagen derecha en posición simulada en RViz por medio de código; ambas activadas desde la interfaz.
 
 ## 6. Código para manejo del Pincher Phantom X100 con ROS Humble
