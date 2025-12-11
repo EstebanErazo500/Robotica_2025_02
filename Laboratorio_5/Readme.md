@@ -255,13 +255,13 @@ flowchart TD
 
 En esta sección se documenta cómo está organizado el montaje del robot, por tanto se adjuntaran imagenes físicas como del RViz donde se puedan apreciar sus componentes: 
 
-<img src="Imagenes/Captura de pantalla 2025-12-10 223854" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 223854.png" alt="flujo1" width="350">
 
 - Posición del PhantomX Pincher X100 respecto al borde de la mesa.
 - Ruta de los cables de alimentación y comunicación para que no interfieran con el movimiento.
 - Zona segura alrededor del brazo para evitar golpes con objetos cercanos.
 
-<img src="Imagenes/Captura de pantalla 2025-12-10 223854" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 223854.png" alt="flujo1" width="350">
 
 
 ## 4. Resumen de funciones principales del código
@@ -310,5 +310,5 @@ El código realizado en Python para el desarrollo de la actividad se puede encon
 
 ## 7. Videos explicativos
 
-Para un mayor detalle de la actividad realizada, se puede observar dos videos, un video del brazo alcanzando cada posición solicitada [aquí](https://youtu.be/yO0ROJNMGEU);
-y otro video con la demostración de uso de la interfaz de usuario de la simulación en el programa, junto con su explicación [aquí](https://youtu.be/yO0ROJNMGEU)
+Para un mayor detalle de la actividad realizada, se puede observar dos videos, un video del brazo físico del robot alcanzando cada posición solicitada [aquí](https://youtu.be/1c2Jp95sRzc);
+y otro video con la demostración de uso de la interfaz de usuario de la simulación en el programa, junto con su explicación [aquí](https://youtu.be/JHsmxwa9OzA)
