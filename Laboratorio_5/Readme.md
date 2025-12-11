@@ -48,7 +48,7 @@ Para implementar la solución se usa:
 Este conjunto de hardware y software permite cerrar el ciclo completo: desde el comando del usuario en la GUI, pasando por ROS 2, hasta el movimiento físico de los servos y la visualización del robot en RViz.
 
 <p align="center">
-<img src="Imagenes/ros2Logo.png" alt="flujo1" width="250">
+<img src="Imagenes/ros2Logo.png" alt="flujo1" width="200">
 <img src="Imagenes/rviz.png" alt="flujo1" width="350">
 </p>
 
