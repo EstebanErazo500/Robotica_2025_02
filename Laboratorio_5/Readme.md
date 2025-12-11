@@ -48,7 +48,7 @@ Para implementar la solución se usa:
 Este conjunto de hardware y software permite cerrar el ciclo completo: desde el comando del usuario en la GUI, pasando por ROS 2, hasta el movimiento físico de los servos y la visualización del robot en RViz.
 
 <p align="center">
-<img src="Imagenes/ros2Logo.png" alt="flujo1" width="350">
+<img src="Imagenes/ros2Logo.png" alt="flujo1" width="250">
 <img src="Imagenes/rviz.png" alt="flujo1" width="350">
 </p>
 
@@ -198,35 +198,44 @@ En esta sección se resume el recorrido que sigue el sistema desde que se ejecut
 
 flowchart TD
 
-    %% NODO INICIAL ÚNICO
-    S[Interfaz de control del PhantomX<br>acciones del usuario]
+flowchart TD
+    A[Acción del usuario en la interfaz de control]
 
-    %% TIPOS DE COMANDO QUE SALEN DE LA INTERFAZ
-    S --> A1[Usuario envía un comando articular<br>por sliders valores o pose predefinida]
-    S --> A4[Usuario pulsa el botón de parada de emergencia]
-    S --> A5[Usuario envía un comando en espacio de tarea<br>XYZ y orientación del TCP]
+    A --> B1[Control por sliders o valores de las articulaciones]
+    A --> B2[Botones de poses de laboratorio y poses personalizadas]
+    A --> B3[Botón HOME]
+    A --> B4[Comando en espacio de la tarea XYZ y orientación del TCP]
+    A --> B5[Botón de parada de emergencia]
 
-    %% NÚCLEO COMÚN PARA EL CONTROL ARTICULAR
-    A1 --> A2[Calcular los ángulos objetivo<br>de cada articulación en grados]
+    %% Ramas que terminan en ángulos articulares
+    B1 --> C[Calcular los ángulos objetivo de cada articulación en grados]
+    B2 --> C
+    B3 --> C
 
-    %% FLOJO FÍSICO  BRAZO REAL
-    A2 --> F1[Convertir esos ángulos a valores<br>de ticks Dynamixel]
-    F1 --> F2[Enviar los ticks por el puerto serie<br>a la cadena de servos]
-    F2 --> F3[Los servos Dynamixel giran<br>y el brazo físico cambia de postura]
+    %% División físico vs virtual
+    C --> F0[Activación física del brazo real sigue los pasos de la columna izquierda]
+    C --> V0[Simulación en RViz sigue los pasos de la columna derecha]
 
-    %% FLOJO VIRTUAL  MODELO EN RVIZ
-    A2 --> V1[Actualizar el modelo interno de ángulos<br>en el nodo PincherController]
-    V1 --> V2[Enviar un mensaje JointState con esos ángulos<br>para que ROS conozca la postura actual]
-    V2 --> V3[Si RViz está abierto actualiza el modelo tridimensional<br>del PhantomX con la misma postura]
+    %% Flujo físico - brazo real
+    F0 --> F1[Convertir esos ángulos a valores de ticks Dynamixel]
+    F1 --> F2[Enviar los ticks por el puerto serie a la cadena de servos]
+    F2 --> F3[Los servos Dynamixel giran y el brazo físico cambia de postura]
 
-    %% SEGURIDAD  PARADA DE EMERGENCIA
-    A4 --> E1[Desactivar el torque de todos los motores]
-    E1 --> E2[Marcar el sistema en estado de emergencia<br>y bloquear nuevos movimientos hasta reactivar]
+    %% Flujo virtual - modelo en RViz
+    V0 --> V1[Actualizar el modelo interno de ángulos en el nodo PincherController]
+    V1 --> V2[Enviar un mensaje JointState con esos ángulos para que ROS conozca la postura actual]
+    V2 --> V3[Si RViz está abierto actualiza el modelo tridimensional del PhantomX con la misma postura]
 
-    %% CONTROL EN ESPACIO DE LA TAREA  MOVEIT
-    A5 --> T1[Tomar XYZ y la orientación que el usuario escribe]
-    T1 --> T2[Crear un mensaje PoseCommand con esa información<br>y publicarlo hacia MoveIt]
-    T2 --> T3[MoveIt planifica una trayectoria con esa pose<br>y la ejecuta en el robot o en la simulación]
+    %% Control en espacio de la tarea
+    B4 --> T1[Tomar la posición XYZ y la orientación que el usuario escribe en la pestaña Espacio de la tarea]
+    T1 --> T2[Crear un mensaje PoseCommand con esos datos]
+    T2 --> T3[Publicar el mensaje PoseCommand hacia MoveIt]
+    T3 --> T4[MoveIt planifica una trayectoria con esa pose y la ejecuta en el robot o en la simulación]
+
+    %% Seguridad del sistema
+    B5 --> E1[Desactivar el torque de todos los motores al pulsar Parada de emergencia]
+    E1 --> E2[Marcar el sistema en estado de emergencia y bloquear nuevos movimientos hasta reactivar]
+
 
 ```
 
