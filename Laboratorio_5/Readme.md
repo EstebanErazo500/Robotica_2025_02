@@ -261,7 +261,7 @@ En esta sección se documenta cómo está organizado el montaje del robot, por t
 - Ruta de los cables de alimentación y comunicación para que no interfieran con el movimiento.
 - Zona segura alrededor del brazo para evitar golpes con objetos cercanos.
 
-<img src="Imagenes/Captura de pantalla 2025-12-10 223854.png" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 223554.png" alt="flujo1" width="350">
 
 
 ## 4. Resumen de funciones principales del código
@@ -303,6 +303,22 @@ Aquí se resumen las funciones principales usadas en este laboratorio y su prop�
 
 ## 5. Comparación de las poses del robot entre la prueba en físico y la simulación en la misma configuración.
 
+<img src="Imagenes/Captura de pantalla 2025-12-10 214359.png" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 214429.png" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 214459.png" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 214716.png" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 214744.png" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 214815.png" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 214856.png" alt="flujo1" width="350">
+
+<img src="Imagenes/Captura de pantalla 2025-12-10 222108.png" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 222125.png" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 222145.png" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 222205.png" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 222226.png" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 222243.png" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 222300.png" alt="flujo1" width="350">
+
 
 ## 6. Código para manejo del Pincher Phantom X100 con ROS Humble
 
@@ -310,5 +326,5 @@ El código realizado en Python para el desarrollo de la actividad se puede encon
 
 ## 7. Videos explicativos
 
-Para un mayor detalle de la actividad realizada, se puede observar dos videos, un video del brazo físico del robot alcanzando cada posición solicitada [aquí](https://youtu.be/1c2Jp95sRzc);
-y otro video con la demostración de uso de la interfaz de usuario de la simulación en el programa, junto con su explicación [aquí](https://youtu.be/JHsmxwa9OzA)
+Para un mayor detalle de la actividad realizada, se puede observar dos videos, un video del brazo físico del robot alcanzando cada posición solicitada [aquí](https://youtu.be/1c2Jp95sRzc); 
+y otro video con la demostración de uso de la interfaz de usuario de la simulación en el programa, junto con su explicación [aquí](https://youtu.be/JHsmxwa9OzA).
