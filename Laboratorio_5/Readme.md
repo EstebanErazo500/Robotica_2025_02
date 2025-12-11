@@ -255,13 +255,13 @@ flowchart TD
 
 En esta sección se documenta cómo está organizado el montaje del robot, por tanto se adjuntaran imagenes físicas como del RViz donde se puedan apreciar sus componentes: 
 
-<img src="Imagenes/TortugaSinError.jpg" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 223854" alt="flujo1" width="350">
 
 - Posición del PhantomX Pincher X100 respecto al borde de la mesa.
 - Ruta de los cables de alimentación y comunicación para que no interfieran con el movimiento.
 - Zona segura alrededor del brazo para evitar golpes con objetos cercanos.
 
-<img src="Imagenes/TortugaSinError.jpg" alt="flujo1" width="350">
+<img src="Imagenes/Captura de pantalla 2025-12-10 223854" alt="flujo1" width="350">
 
 
 ## 4. Resumen de funciones principales del código
