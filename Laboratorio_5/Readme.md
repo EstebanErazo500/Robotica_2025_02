@@ -188,58 +188,38 @@ Con esto, la solución propuesta cubre los requisitos de la guía los cuales con
 En esta sección se resume el recorrido que sigue el sistema desde que se ejecuta el nodo control_servo hasta que el robot físico o la simulación responden a un comando de la interfaz. El diagrama se describe con Mermaid para poder verlo en GitHub de forma directa.
 
 ```mermaid
+
 flowchart TD
 
-    %% NODO INICIAL COMÚN
-    S[Comandos desde la interfaz gráfica<br>sliders, valores, poses, HOME, emergencia y espacio de tarea]
+    %% NODO INICIAL ÚNICO
+    S[Interfaz de control del PhantomX<br>acciones del usuario]
 
-    %% ENTRADAS DESDE LA GUI
-    U1[Control por sliders o valores<br>de las articulaciones]
-    U2[Botones de poses del laboratorio<br>y poses personalizadas]
-    U3[Botón HOME]
-    U4[Botón de parada de emergencia]
-    U5[Comando en espacio de la tarea<br>XYZ y orientación del TCP]
+    %% TIPOS DE COMANDO QUE SALEN DE LA INTERFAZ
+    S --> A1[Usuario envía un comando articular<br>por sliders valores o pose predefinida]
+    S --> A4[Usuario pulsa el botón de parada de emergencia]
+    S --> A5[Usuario envía un comando en espacio de tarea<br>XYZ y orientación del TCP]
 
-    S --> U1
-    S --> U2
-    S --> U3
-    S --> U4
-    S --> U5
+    %% NÚCLEO COMÚN PARA EL CONTROL ARTICULAR
+    A1 --> A2[Calcular los ángulos objetivo<br>de cada articulación en grados]
 
-    %% NODO QUE UNE LOS COMANDOS ARTICULARES
-    C1[Calcular los ángulos objetivo<br>de cada articulación en grados]
+    %% FLOJO FÍSICO  BRAZO REAL
+    A2 --> F1[Convertir esos ángulos a valores<br>de ticks Dynamixel]
+    F1 --> F2[Enviar los ticks por el puerto serie<br>a la cadena de servos]
+    F2 --> F3[Los servos Dynamixel giran<br>y el brazo físico cambia de postura]
 
-    U1 --> C1
-    U2 --> C1
-    U3 --> C1
+    %% FLOJO VIRTUAL  MODELO EN RVIZ
+    A2 --> V1[Actualizar el modelo interno de ángulos<br>en el nodo PincherController]
+    V1 --> V2[Enviar un mensaje JointState con esos ángulos<br>para que ROS conozca la postura actual]
+    V2 --> V3[Si RViz está abierto actualiza el modelo tridimensional<br>del PhantomX con la misma postura]
 
-    %% FLUJO FÍSICO – BRAZO REAL
-    F1[Convertir los ángulos a valores<br>de ticks Dynamixel]
-    F2[Enviar los ticks por el puerto serie<br>a la cadena de servos]
-    F3[Servos Dynamixel giran<br>y el brazo físico cambia de postura]
+    %% SEGURIDAD  PARADA DE EMERGENCIA
+    A4 --> E1[Desactivar el torque de todos los motores]
+    E1 --> E2[Marcar el sistema en estado de emergencia<br>y bloquear nuevos movimientos hasta reactivar]
 
-    C1 --> F1 --> F2 --> F3
-
-    %% FLUJO VIRTUAL – MODELO EN RVIZ
-    V1[Actualizar el modelo interno de ángulos<br>en el nodo PincherController]
-    V2[Publicar mensaje JointState con esos ángulos<br>para que ROS conozca la postura actual]
-    V3[Si RViz está abierto, actualizar el modelo 3D<br>del PhantomX con la misma postura]
-
-    C1 --> V1 --> V2 --> V3
-
-    %% SEGURIDAD – PARADA DE EMERGENCIA
-    E1[Desactivar el torque de todos los motores]
-    E2[Marcar el sistema en estado de emergencia<br>y bloquear nuevos movimientos hasta reactivar]
-
-    U4 --> E1 --> E2
-
-    %% CONTROL EN ESPACIO DE LA TAREA – MOVEIT
-    T1[Tomar X Y Z y la orientación que el usuario escribe<br>en la pestaña Espacio de la tarea]
-    T2[Crear un mensaje PoseCommand con esa información<br>y publicarlo hacia MoveIt]
-    T3[MoveIt planifica una trayectoria con esa pose<br>y la ejecuta en el robot o en la simulación]
-
-    U5 --> T1 --> T2 --> T3
-
+    %% CONTROL EN ESPACIO DE LA TAREA  MOVEIT
+    A5 --> T1[Tomar XYZ y la orientación que el usuario escribe]
+    T1 --> T2[Crear un mensaje PoseCommand con esa información<br>y publicarlo hacia MoveIt]
+    T2 --> T3[MoveIt planifica una trayectoria con esa pose<br>y la ejecuta en el robot o en la simulación]
 
 ```
 
