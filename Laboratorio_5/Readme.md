@@ -349,7 +349,7 @@ Aquí se resumen las funciones principales usadas en este laboratorio y su prop�
 
 ## 6. Código para manejo del Pincher Phantom X100 con ROS Humble
 
-El código realizado en Python para el desarrollo de la actividad se puede encontrar como ...  dentro de la carpeta llamada *"Codigo"*.
+El código realizado en Python para el desarrollo de la actividad se puede encontrar como los archivos, control_servo.py, view.launch.py y joint_angles_degrees.py dentro de la carpeta llamada *"Codigo"*.
 
 ## 7. Videos explicativos
 
