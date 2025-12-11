@@ -303,8 +303,10 @@ Aquí se resumen las funciones principales usadas en este laboratorio y su prop�
 
 ## 5. Comparación de las poses del robot entre la prueba en físico y la simulación en la misma configuración.
 
+<p align="center">
 <img src="Imagenes/Captura de pantalla 2025-12-10 214359.png" alt="flujo1" width="350">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222108.png" alt="flujo2" width="350">
+</p>
 
 <img src="Imagenes/Captura de pantalla 2025-12-10 214429.png" alt="flujo1" width="350">
 <img src="Imagenes/Captura de pantalla 2025-12-10 222125.png" alt="flujo2" width="350">
