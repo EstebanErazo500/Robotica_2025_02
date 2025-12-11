@@ -197,8 +197,6 @@ En esta sección se resume el recorrido que sigue el sistema desde que se ejecut
 ```mermaid
 
 flowchart TD
-
-flowchart TD
     A[Acción del usuario en la interfaz de control]
 
     A --> B1[Control por sliders o valores de las articulaciones]
