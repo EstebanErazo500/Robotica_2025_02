@@ -1,6 +1,6 @@
 # Laboratorios de Robótica
 
-´´´ mermaid
+```mermaid
 flowchart TD
 
     A[Acción del usuario en la interfaz de control]
@@ -40,8 +40,6 @@ flowchart TD
     %% Parada de emergencia
     subgraph EMERGENCIA [Seguridad del sistema]
         F --> R[Desactivar el torque de todos los motores al pulsar Parada de emergencia] 
-
-
-    ´´´
         R --> S[Marcar el sistema en estado de emergencia y bloquear nuevos movimientos hasta reactivar]
     end
+```
